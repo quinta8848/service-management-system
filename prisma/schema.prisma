@@ -1,13 +1,150 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlite"
-   
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  ENGINEER
+  CLIENT
+}
+
+enum EquipmentStatus {
+  AVAILABLE
+  RENTED
+  IN_SERVICE
+  BROKEN
+  DECOMMISSIONED
+}
+
+enum RepairStatus {
+  NEW
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
+}
+
+enum RepairPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ServiceStatus {
+  PLANNED
+  DONE
+  OVERDUE
+  CANCELED
+}
+
+enum ServiceType {
+  INSPECTION
+  MAINTENANCE
+  DIAGNOSTICS
+  REPAIR
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         UserRole
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  assignedRepairRequests RepairRequest[]
+  serviceEvents          ServiceEvent[]
+}
+
+model Client {
+  id            Int      @id @default(autoincrement())
+  companyName   String
+  contactPerson String
+  phone         String?
+  email         String?  @unique
+  address       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  equipment      Equipment[]
+  repairRequests RepairRequest[]
+}
+
+model EquipmentModel {
+  id              Int      @id @default(autoincrement())
+  name            String
+  manufacturer    String
+  category        String?
+  payloadCapacity Float?
+  reach           Float?
+  description     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  equipment Equipment[]
+}
+
+model Equipment {
+  id                Int             @id @default(autoincrement())
+  inventoryNumber   String          @unique
+  serialNumber      String          @unique
+  status            EquipmentStatus @default(AVAILABLE)
+  location          String?
+  purchaseDate      DateTime?
+  commissioningDate DateTime?
+  notes             String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  modelId  Int
+  clientId Int?
+
+  model  EquipmentModel @relation(fields: [modelId], references: [id])
+  client Client?        @relation(fields: [clientId], references: [id])
+
+  repairRequests RepairRequest[]
+  serviceEvents  ServiceEvent[]
+}
+
+model RepairRequest {
+  id          Int            @id @default(autoincrement())
+  title       String
+  description String
+  status      RepairStatus   @default(NEW)
+  priority    RepairPriority @default(MEDIUM)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  equipmentId        Int
+  clientId           Int
+  assignedEngineerId Int?
+
+  equipment        Equipment @relation(fields: [equipmentId], references: [id])
+  client           Client    @relation(fields: [clientId], references: [id])
+  assignedEngineer User?     @relation(fields: [assignedEngineerId], references: [id])
+}
+
+model ServiceEvent {
+  id              Int           @id @default(autoincrement())
+  type            ServiceType
+  status          ServiceStatus @default(PLANNED)
+  plannedDate     DateTime
+  completedDate   DateTime?
+  workDescription String
+  result          String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  equipmentId Int
+  engineerId  Int?
+
+  equipment Equipment @relation(fields: [equipmentId], references: [id])
+  engineer  User?     @relation(fields: [engineerId], references: [id])
 }
