@@ -1,19 +1,18 @@
 const express = require('express');
+const equipmentRoutes = require('./routes/equipment.routes');
+
 const app = express();
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const PORT = 3000;
 
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send('Service Management System работает');
+  res.send('Service Management System работает');
 });
 
-app.listen(3000, () => {
-    console.log('Сервер запущен на http://localhost:3000');
-});
+// подключаем маршруты оборудования
+app.use('/equipment', equipmentRoutes);
 
-app.get('/equipment', async (req, res) => {
-    const data = await prisma.equipment.findMany();
-    res.json(data);
+app.listen(PORT, () => {
+  console.log(`Сервер запущен на http://localhost:${PORT}`);
 });
