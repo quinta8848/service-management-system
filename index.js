@@ -2,6 +2,7 @@ const express = require('express');
 const equipmentRoutes = require('./routes/equipment.routes');
 const clientsRoutes = require('./routes/clients.routes');
 const repairRoutes = require('./routes/repair.routes');
+const serviceRoutes = require('./routes/service.routes');
 
 const app = express();
 const PORT = 8848;
@@ -16,6 +17,7 @@ app.get('/', (req, res) => {
 app.use('/equipment', equipmentRoutes);
 app.use('/clients', clientsRoutes);
 app.use('/repair-requests', repairRoutes);
+app.use('/service-events', serviceRoutes);
 
 app.listen(PORT, () => {
   console.log(`Сервер запущен на http://localhost:${PORT}`);
