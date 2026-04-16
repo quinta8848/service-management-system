@@ -5,7 +5,31 @@ const prisma = require('../db/prisma');
 // GET /equipment - получить всё оборудование
 router.get('/', async (req, res) => {
   try {
+    const { status, search } = req.query;
+
+    const where = {};
+
+    if (status) {
+      where.status = status;
+    }
+
+    if (search) {
+      where.OR = [
+        {
+          inventoryNumber: {
+            contains: search,
+          },
+        },
+        {
+          serialNumber: {
+            contains: search,
+          },
+        },
+      ];
+    }
+
     const equipment = await prisma.equipment.findMany({
+      where,
       include: {
         model: true,
         client: true,
@@ -25,28 +49,27 @@ router.get('/', async (req, res) => {
 });
 
 // GET /equipment/:id - получить оборудование по id
-router.get('/', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
-    const { status } = req.query;
+    const id = Number(req.params.id);
 
-    const where = {};
-
-    if (status) {
-      where.status = status;
+    if (Number.isNaN(id)) {
+      return res.status(400).json({ error: 'Некорректный id оборудования' });
     }
 
-    const equipment = await prisma.equipment.findMany({
-      where,
+    const equipment = await prisma.equipment.findUnique({
+      where: { id },
       include: {
         model: true,
         client: true,
         repairRequests: true,
         serviceEvents: true,
       },
-      orderBy: {
-        id: 'asc',
-      },
     });
+
+    if (!equipment) {
+      return res.status(404).json({ error: 'Оборудование не найдено' });
+    }
 
     res.json(equipment);
   } catch (error) {
