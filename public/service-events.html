@@ -5,15 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Обслуживание | ServiceMS</title>
   <style>
-    * {
-      box-sizing: border-box;
+    * { box-sizing: border-box; }
+
+    :root {
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --text: #1f2937;
+      --muted: #64748b;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --border: #e5e7eb;
+      --nav: #0f172a;
+      --nav2: #1e3a8a;
+      --shadow: 0 12px 30px rgba(15,23,42,0.06);
     }
 
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      color: #1f2937;
-      background: #f5f7fb;
+      color: var(--text);
+      background: var(--bg);
     }
 
     a {
@@ -27,48 +38,71 @@
     }
 
     .topbar {
-      background: #0f172a;
+      background: linear-gradient(90deg, var(--nav), var(--nav2));
       color: #fff;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      width: 100%;
     }
 
     .topbar-inner {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 200px 1fr;
       align-items: center;
-      min-height: 72px;
-      gap: 20px;
-      flex-wrap: wrap;
+      height: 70px;
+      width: 100%;
     }
 
     .logo {
-      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
       font-weight: 700;
+      color: #fff;
+      height: 100%;
     }
 
-    .logo span {
-      color: #60a5fa;
-    }
+    .logo span { color: #60a5fa; }
 
     .nav {
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      height: 100%;
     }
 
     .nav a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: #e5e7eb;
       font-size: 15px;
       transition: 0.2s;
+      position: relative;
+      height: 100%;
+      padding: 0 10px;
+      text-align: center;
     }
 
-    .nav a:hover,
+    .nav a:hover {
+      background: rgba(255,255,255,0.05);
+      color: #60a5fa;
+    }
+
     .nav a.active {
       color: #60a5fa;
     }
 
+    .nav a.active::after {
+      content: "";
+      position: absolute;
+      bottom: 10px;
+      width: 40%;
+      height: 2px;
+      background: #60a5fa;
+      border-radius: 2px;
+    }
+
     .hero {
-      background: linear-gradient(135deg, #0f172a, #1e3a8a);
+      background: linear-gradient(135deg, var(--nav), var(--nav2));
       color: #fff;
       padding: 56px 0;
     }
@@ -80,7 +114,7 @@
 
     .hero p {
       margin: 0;
-      max-width: 850px;
+      max-width: 920px;
       color: #dbeafe;
       line-height: 1.6;
       font-size: 17px;
@@ -91,11 +125,11 @@
     }
 
     .controls {
-      background: #fff;
-      border: 1px solid #e5e7eb;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 18px;
       padding: 20px;
-      box-shadow: 0 10px 28px rgba(15,23,42,0.06);
+      box-shadow: var(--shadow);
       margin-top: -30px;
       position: relative;
       z-index: 2;
@@ -147,12 +181,12 @@
     }
 
     .btn-primary {
-      background: #2563eb;
+      background: var(--primary);
       color: #fff;
     }
 
     .btn-primary:hover {
-      background: #1d4ed8;
+      background: var(--primary-dark);
     }
 
     .btn-secondary {
@@ -166,16 +200,16 @@
 
     .summary {
       margin-top: 18px;
-      color: #64748b;
+      color: var(--muted);
       font-size: 15px;
     }
 
     .table-wrap {
       margin-top: 24px;
-      background: #fff;
+      background: var(--surface);
       border-radius: 18px;
-      border: 1px solid #e5e7eb;
-      box-shadow: 0 12px 30px rgba(15,23,42,0.06);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
       overflow: hidden;
     }
 
@@ -186,7 +220,7 @@
 
     th, td {
       padding: 14px 16px;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid var(--border);
       text-align: left;
       vertical-align: top;
       font-size: 14px;
@@ -225,6 +259,31 @@
     .type-DIAGNOSTICS { background: #7c3aed; }
     .type-REPAIR { background: #d97706; }
 
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      border: none;
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .action-edit {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .action-delete {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
     .message {
       margin-top: 20px;
       padding: 14px 16px;
@@ -243,8 +302,8 @@
     }
 
     .info-card {
-      background: #fff;
-      border: 1px solid #e5e7eb;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 18px;
       padding: 22px;
       box-shadow: 0 10px 28px rgba(15,23,42,0.05);
@@ -263,7 +322,7 @@
     }
 
     .footer {
-      background: #0f172a;
+      background: var(--nav);
       color: #cbd5e1;
       padding: 26px 0;
       margin-top: 40px;
@@ -281,6 +340,114 @@
       color: #94a3b8;
     }
 
+    .modal.hidden {
+      display: none;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+    }
+
+    .modal-content {
+      position: relative;
+      z-index: 1;
+      width: min(860px, 100%);
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+      padding: 24px;
+      max-height: 90vh;
+      overflow: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 24px;
+      color: #0f172a;
+    }
+
+    .modal-close {
+      border: none;
+      background: #e5e7eb;
+      color: #111827;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      font-size: 24px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-close:hover {
+      background: #d1d5db;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-field label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #374151;
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      font-size: 14px;
+      background: #fff;
+      font-family: inherit;
+    }
+
+    .form-field textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .form-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
     @media (max-width: 1100px) {
       .controls-grid {
         grid-template-columns: 1fr 1fr;
@@ -288,6 +455,21 @@
 
       .info-section {
         grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+
+      .logo {
+        justify-content: flex-start;
+        padding: 14px 0 8px;
+      }
+
+      .nav {
+        grid-template-columns: repeat(5, 1fr);
+        min-height: 56px;
       }
     }
 
@@ -303,16 +485,27 @@
       table {
         min-width: 1200px;
       }
+
+      .nav {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .nav a {
+        justify-content: flex-start;
+        padding-left: 16px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <div class="container topbar-inner">
-      <div class="logo">Service<span>MS</span></div>
-
+    <div class="topbar-inner">
+      <a href="/index.html" class="logo">Service<span>MS</span></a>
       <nav class="nav">
-        <a href="/index.html">Главная</a>
         <a href="/equipment.html">Оборудование</a>
         <a href="/clients.html">Клиенты</a>
         <a href="/repair-requests.html">Заявки</a>
@@ -325,11 +518,7 @@
   <section class="hero">
     <div class="container">
       <h1>Сервисное обслуживание</h1>
-      <p>
-        Раздел предназначен для учета плановых и выполненных сервисных событий:
-        диагностики, технического обслуживания, инспекций и ремонтных работ.
-        Здесь отображается история сопровождения оборудования и текущий статус сервисных задач.
-      </p>
+      <p>Раздел предназначен для учета плановых и выполненных сервисных событий: диагностики, технического обслуживания, инспекций и ремонтных работ.</p>
     </div>
   </section>
 
@@ -339,13 +528,8 @@
         <div class="controls-grid">
           <div class="field">
             <label for="searchInput">Поиск</label>
-            <input
-              id="searchInput"
-              type="text"
-              placeholder="Введите описание работ или результат"
-            />
+            <input id="searchInput" type="text" placeholder="Описание работ или результат" />
           </div>
-
           <div class="field">
             <label for="statusFilter">Статус</label>
             <select id="statusFilter">
@@ -356,7 +540,6 @@
               <option value="CANCELED">CANCELED</option>
             </select>
           </div>
-
           <div class="field">
             <label for="typeFilter">Тип события</label>
             <select id="typeFilter">
@@ -367,16 +550,15 @@
               <option value="REPAIR">REPAIR</option>
             </select>
           </div>
-
           <div class="field">
             <label>Действия</label>
             <div class="buttons">
               <button class="btn btn-primary" id="applyBtn">Применить</button>
               <button class="btn btn-secondary" id="resetBtn">Сбросить</button>
+              <button class="btn btn-primary" id="createBtn">+ Добавить</button>
             </div>
           </div>
         </div>
-
         <div class="summary" id="summaryText">Загрузка данных...</div>
       </div>
 
@@ -395,6 +577,7 @@
               <th>Результат</th>
               <th>Оборудование</th>
               <th>Инженер</th>
+              <th>Действия</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -404,26 +587,15 @@
       <div class="info-section">
         <div class="info-card">
           <h3>Назначение раздела</h3>
-          <p>
-            Модуль обслуживания позволяет хранить данные о плановых и выполненных работах
-            по сопровождению оборудования на протяжении всего жизненного цикла эксплуатации.
-          </p>
+          <p>Модуль обслуживания позволяет хранить данные о плановых и выполненных работах по сопровождению оборудования.</p>
         </div>
-
         <div class="info-card">
           <h3>Что можно анализировать</h3>
-          <p>
-            Здесь можно отслеживать просроченные события, завершённые работы, типы обслуживания
-            и участие конкретных инженеров в сервисных операциях.
-          </p>
+          <p>Можно отслеживать просроченные события, завершённые работы, типы обслуживания и участие инженеров.</p>
         </div>
-
         <div class="info-card">
           <h3>Практическая польза</h3>
-          <p>
-            Система сервисных событий помогает не пропускать обязательные регламентные работы,
-            вести историю обслуживания и повышать надёжность роботизированного оборудования.
-          </p>
+          <p>Система сервисных событий помогает не пропускать регламентные работы и вести историю обслуживания оборудования.</p>
         </div>
       </div>
     </div>
@@ -431,13 +603,79 @@
 
   <footer class="footer">
     <div class="container footer-inner">
-      <div>
-        <strong>ServiceMS</strong><br />
-        <small>Планирование и контроль сервисного сопровождения оборудования</small>
-      </div>
+      <div><strong>ServiceMS</strong><br /><small>Планирование и контроль сервисного сопровождения оборудования</small></div>
       <small>© 2026 Service Management System</small>
     </div>
   </footer>
+
+  <div id="serviceModal" class="modal hidden">
+    <div class="modal-overlay" id="serviceModalOverlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="serviceModalTitle">Добавить сервисное событие</h2>
+        <button class="modal-close" id="serviceModalCloseBtn">×</button>
+      </div>
+
+      <form id="serviceForm">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="type">Тип события</label>
+            <select id="type" name="type">
+              <option value="INSPECTION">INSPECTION</option>
+              <option value="MAINTENANCE">MAINTENANCE</option>
+              <option value="DIAGNOSTICS">DIAGNOSTICS</option>
+              <option value="REPAIR">REPAIR</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="status">Статус</label>
+            <select id="status" name="status">
+              <option value="PLANNED">PLANNED</option>
+              <option value="DONE">DONE</option>
+              <option value="OVERDUE">OVERDUE</option>
+              <option value="CANCELED">CANCELED</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="plannedDate">Плановая дата</label>
+            <input type="date" id="plannedDate" name="plannedDate" />
+          </div>
+
+          <div class="form-field">
+            <label for="completedDate">Дата выполнения</label>
+            <input type="date" id="completedDate" name="completedDate" />
+          </div>
+
+          <div class="form-field full">
+            <label for="workDescription">Описание работ</label>
+            <textarea id="workDescription" name="workDescription"></textarea>
+          </div>
+
+          <div class="form-field full">
+            <label for="result">Результат</label>
+            <textarea id="result" name="result"></textarea>
+          </div>
+
+          <div class="form-field">
+            <label for="equipmentId">ID оборудования</label>
+            <input type="number" id="equipmentId" name="equipmentId" />
+          </div>
+
+          <div class="form-field">
+            <label for="engineerId">ID инженера</label>
+            <input type="number" id="engineerId" name="engineerId" />
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+          <button type="button" class="btn btn-secondary" id="serviceCancelBtn">Отмена</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script>
     const tbody = document.querySelector('#serviceTable tbody');
@@ -446,8 +684,27 @@
     const typeFilter = document.getElementById('typeFilter');
     const applyBtn = document.getElementById('applyBtn');
     const resetBtn = document.getElementById('resetBtn');
+    const createBtn = document.getElementById('createBtn');
     const summaryText = document.getElementById('summaryText');
     const messageBox = document.getElementById('messageBox');
+
+    const modal = document.getElementById('serviceModal');
+    const modalOverlay = document.getElementById('serviceModalOverlay');
+    const modalCloseBtn = document.getElementById('serviceModalCloseBtn');
+    const cancelBtn = document.getElementById('serviceCancelBtn');
+    const modalTitle = document.getElementById('serviceModalTitle');
+    const form = document.getElementById('serviceForm');
+
+    const typeInput = document.getElementById('type');
+    const statusInput = document.getElementById('status');
+    const plannedDateInput = document.getElementById('plannedDate');
+    const completedDateInput = document.getElementById('completedDate');
+    const workDescriptionInput = document.getElementById('workDescription');
+    const resultInput = document.getElementById('result');
+    const equipmentIdInput = document.getElementById('equipmentId');
+    const engineerIdInput = document.getElementById('engineerId');
+
+    let editingId = null;
 
     function showMessage(text, isError = false) {
       messageBox.style.display = 'block';
@@ -462,13 +719,8 @@
       messageBox.textContent = '';
     }
 
-    function createStatusBadge(status) {
-      return `<span class="status-badge status-${status}">${status}</span>`;
-    }
-
-    function createTypeBadge(type) {
-      return `<span class="type-badge type-${type}">${type}</span>`;
-    }
+    function createStatusBadge(status) { return `<span class="status-badge status-${status}">${status}</span>`; }
+    function createTypeBadge(type) { return `<span class="type-badge type-${type}">${type}</span>`; }
 
     function formatDate(value) {
       if (!value) return '—';
@@ -476,6 +728,43 @@
       if (Number.isNaN(date.getTime())) return value;
       return date.toLocaleDateString('ru-RU');
     }
+
+    function toDateInputValue(value) {
+      if (!value) return '';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return '';
+      return date.toISOString().slice(0, 10);
+    }
+
+    function openModal(mode = 'create', item = null) {
+      editingId = mode === 'edit' && item ? item.id : null;
+      modalTitle.textContent = mode === 'edit' ? 'Редактировать сервисное событие' : 'Добавить сервисное событие';
+
+      typeInput.value = item?.type ?? 'MAINTENANCE';
+      statusInput.value = item?.status ?? 'PLANNED';
+      plannedDateInput.value = toDateInputValue(item?.plannedDate);
+      completedDateInput.value = toDateInputValue(item?.completedDate);
+      workDescriptionInput.value = item?.workDescription ?? '';
+      resultInput.value = item?.result ?? '';
+      equipmentIdInput.value = item?.equipmentId ?? '';
+      engineerIdInput.value = item?.engineerId ?? '';
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      editingId = null;
+      form.reset();
+      typeInput.value = 'MAINTENANCE';
+      statusInput.value = 'PLANNED';
+    }
+
+    modalOverlay.addEventListener('click', closeModal);
+    modalCloseBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+
+    createBtn.addEventListener('click', () => openModal('create'));
 
     async function loadServiceEvents() {
       try {
@@ -485,13 +774,9 @@
 
         const response = await fetch('/service-events');
         const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || 'Ошибка при загрузке сервисных событий');
-        }
+        if (!response.ok) throw new Error(data.error || 'Ошибка при загрузке сервисных событий');
 
         let filteredData = data;
-
         const search = searchInput.value.trim().toLowerCase();
         const status = statusFilter.value;
         const type = typeFilter.value;
@@ -504,13 +789,8 @@
           });
         }
 
-        if (status) {
-          filteredData = filteredData.filter(item => item.status === status);
-        }
-
-        if (type) {
-          filteredData = filteredData.filter(item => item.type === type);
-        }
+        if (status) filteredData = filteredData.filter(item => item.status === status);
+        if (type) filteredData = filteredData.filter(item => item.type === type);
 
         if (!Array.isArray(filteredData) || filteredData.length === 0) {
           summaryText.textContent = 'Найдено записей: 0';
@@ -520,7 +800,6 @@
 
         filteredData.forEach(item => {
           const tr = document.createElement('tr');
-
           tr.innerHTML = `
             <td>${item.id ?? ''}</td>
             <td>${createTypeBadge(item.type ?? '')}</td>
@@ -531,8 +810,13 @@
             <td>${item.result ?? '—'}</td>
             <td>${item.equipment?.inventoryNumber ?? '—'}</td>
             <td>${item.engineer?.name ?? '—'}</td>
+            <td>
+              <div class="actions">
+                <button class="action-btn action-edit" onclick="editItem(${item.id})">✏️</button>
+                <button class="action-btn action-delete" onclick="deleteItem(${item.id})">❌</button>
+              </div>
+            </td>
           `;
-
           tbody.appendChild(tr);
         });
 
@@ -544,21 +828,80 @@
       }
     }
 
-    applyBtn.addEventListener('click', loadServiceEvents);
+    async function deleteItem(id) {
+      if (!confirm('Удалить сервисное событие?')) return;
+      try {
+        const res = await fetch(`/service-events/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Ошибка удаления');
+        showMessage(data.message || 'Удалено');
+        loadServiceEvents();
+      } catch (err) {
+        showMessage(err.message || 'Ошибка удаления', true);
+      }
+    }
 
+    async function editItem(id) {
+      try {
+        const res = await fetch(`/service-events/${id}`);
+        const item = await res.json();
+        if (!res.ok) throw new Error(item.error || 'Не удалось получить запись');
+        openModal('edit', item);
+      } catch (err) {
+        showMessage(err.message || 'Ошибка открытия формы', true);
+      }
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const payload = {
+        type: typeInput.value,
+        status: statusInput.value,
+        plannedDate: plannedDateInput.value,
+        completedDate: completedDateInput.value || null,
+        workDescription: workDescriptionInput.value.trim(),
+        result: resultInput.value.trim() || null,
+        equipmentId: equipmentIdInput.value ? Number(equipmentIdInput.value) : null,
+        engineerId: engineerIdInput.value ? Number(engineerIdInput.value) : null
+      };
+
+      try {
+        let response;
+
+        if (editingId) {
+          response = await fetch(`/service-events/${editingId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        } else {
+          response = await fetch('/service-events', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        }
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Ошибка сохранения');
+
+        showMessage(editingId ? 'Сервисное событие обновлено' : 'Сервисное событие создано');
+        closeModal();
+        loadServiceEvents();
+      } catch (err) {
+        showMessage(err.message || 'Ошибка сохранения', true);
+      }
+    });
+
+    applyBtn.addEventListener('click', loadServiceEvents);
     resetBtn.addEventListener('click', () => {
       searchInput.value = '';
       statusFilter.value = '';
       typeFilter.value = '';
       loadServiceEvents();
     });
-
-    searchInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        loadServiceEvents();
-      }
-    });
-
+    searchInput.addEventListener('keydown', (event) => { if (event.key === 'Enter') loadServiceEvents(); });
     loadServiceEvents();
   </script>
 </body>

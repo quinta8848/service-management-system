@@ -5,314 +5,107 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Оборудование | ServiceMS</title>
   <style>
-    * {
-      box-sizing: border-box;
+    * { box-sizing: border-box; }
+    :root {
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --text: #1f2937;
+      --muted: #64748b;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --border: #e5e7eb;
+      --nav: #0f172a;
+      --nav2: #1e3a8a;
+      --shadow: 0 12px 30px rgba(15,23,42,0.06);
     }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      color: #1f2937;
-      background: #f5f7fb;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .container {
-      width: min(1200px, calc(100% - 40px));
-      margin: 0 auto;
-    }
-
-    .topbar {
-      background: #0f172a;
-      color: #fff;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .topbar-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      min-height: 72px;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .logo {
-      font-size: 24px;
-      font-weight: 700;
-    }
-
-    .logo span {
-      color: #60a5fa;
-    }
-
-    .nav {
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .nav a {
-      color: #e5e7eb;
-      font-size: 15px;
-      transition: 0.2s;
-    }
-
-    .nav a:hover,
-    .nav a.active {
-      color: #60a5fa;
-    }
-
-    .hero {
-      background: linear-gradient(135deg, #0f172a, #1e3a8a);
-      color: #fff;
-      padding: 56px 0;
-    }
-
-    .hero h1 {
-      margin: 0 0 14px;
-      font-size: clamp(30px, 4vw, 46px);
-    }
-
-    .hero p {
-      margin: 0;
-      max-width: 850px;
-      color: #dbeafe;
-      line-height: 1.6;
-      font-size: 17px;
-    }
-
-    .section {
-      padding: 36px 0 60px;
-    }
-
-    .controls {
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 18px;
-      padding: 20px;
-      box-shadow: 0 10px 28px rgba(15,23,42,0.06);
-      margin-top: -30px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .controls-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-      align-items: end;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .field label {
-      font-size: 14px;
-      font-weight: 700;
-      color: #374151;
-    }
-
-    .field input,
-    .field select {
-      width: 100%;
-      padding: 11px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      font-size: 14px;
-      background: #fff;
-    }
-
-    .buttons {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      padding: 11px 16px;
-      border: none;
-      border-radius: 10px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.2s;
-      font-size: 14px;
-    }
-
-    .btn-primary {
-      background: #2563eb;
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: #1d4ed8;
-    }
-
-    .btn-secondary {
-      background: #e5e7eb;
-      color: #111827;
-    }
-
-    .btn-secondary:hover {
-      background: #d1d5db;
-    }
-
-    .summary {
-      margin-top: 18px;
-      color: #64748b;
-      font-size: 15px;
-    }
-
-    .table-wrap {
-      margin-top: 24px;
-      background: #fff;
-      border-radius: 18px;
-      border: 1px solid #e5e7eb;
-      box-shadow: 0 12px 30px rgba(15,23,42,0.06);
-      overflow: hidden;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    th, td {
-      padding: 14px 16px;
-      border-bottom: 1px solid #e5e7eb;
-      text-align: left;
-      vertical-align: top;
-      font-size: 14px;
-    }
-
-    th {
-      background: #f8fafc;
-      color: #111827;
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    tbody tr:hover {
-      background: #f8fbff;
-    }
-
-    .status-badge {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #fff;
-      white-space: nowrap;
-    }
-
+    body { margin: 0; font-family: Arial, sans-serif; color: var(--text); background: var(--bg); }
+    a { text-decoration: none; color: inherit; }
+    .container { width: min(1200px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar { background: linear-gradient(90deg, var(--nav), var(--nav2)); color: #fff; width: 100%; }
+    .topbar-inner { display: grid; grid-template-columns: 200px 1fr; align-items: center; height: 70px; width: 100%; }
+    .logo { display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: #fff; height: 100%; }
+    .logo span { color: #60a5fa; }
+    .nav { display: grid; grid-template-columns: repeat(5, 1fr); height: 100%; }
+    .nav a { display: flex; align-items: center; justify-content: center; color: #e5e7eb; font-size: 15px; transition: 0.2s; position: relative; height: 100%; padding: 0 10px; text-align: center; }
+    .nav a:hover { background: rgba(255,255,255,0.05); color: #60a5fa; }
+    .nav a.active { color: #60a5fa; }
+    .nav a.active::after { content: ""; position: absolute; bottom: 10px; width: 40%; height: 2px; background: #60a5fa; border-radius: 2px; }
+    .hero { background: linear-gradient(135deg, var(--nav), var(--nav2)); color: #fff; padding: 56px 0; }
+    .hero h1 { margin: 0 0 14px; font-size: clamp(30px, 4vw, 46px); }
+    .hero p { margin: 0; max-width: 920px; color: #dbeafe; line-height: 1.6; font-size: 17px; }
+    .section { padding: 36px 0 60px; }
+    .controls { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 20px; box-shadow: var(--shadow); margin-top: -30px; position: relative; z-index: 2; }
+    .controls-grid { display: grid; grid-template-columns: 1fr 220px auto; gap: 14px; align-items: end; }
+    .field { display: flex; flex-direction: column; gap: 8px; }
+    .field label { font-size: 14px; font-weight: 700; color: #374151; }
+    .field input, .field select { width: 100%; padding: 11px 12px; border: 1px solid #d1d5db; border-radius: 10px; font-size: 14px; background: #fff; }
+    .buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn { padding: 11px 16px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 14px; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { background: #e5e7eb; color: #111827; }
+    .btn-secondary:hover { background: #d1d5db; }
+    .summary { margin-top: 18px; color: var(--muted); font-size: 15px; }
+    .table-wrap { margin-top: 24px; background: var(--surface); border-radius: 18px; border: 1px solid var(--border); box-shadow: var(--shadow); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 14px 16px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; font-size: 14px; }
+    th { background: #f8fafc; color: #111827; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; }
+    tbody tr:hover { background: #f8fbff; }
+    .status-badge { display: inline-block; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; color: #fff; white-space: nowrap; }
     .status-AVAILABLE { background: #16a34a; }
     .status-RENTED { background: #2563eb; }
     .status-IN_SERVICE { background: #d97706; }
     .status-BROKEN { background: #dc2626; }
     .status-DECOMMISSIONED { background: #6b7280; }
-
-    .message {
-      margin-top: 20px;
-      padding: 14px 16px;
-      border-radius: 12px;
-      background: #eff6ff;
-      color: #1d4ed8;
-      border: 1px solid #bfdbfe;
-      display: none;
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .action-btn { border: none; border-radius: 8px; padding: 8px 10px; cursor: pointer; font-weight: 700; font-size: 13px; }
+    .action-edit { background: #dbeafe; color: #1d4ed8; }
+    .action-delete { background: #fee2e2; color: #b91c1c; }
+    .message { margin-top: 20px; padding: 14px 16px; border-radius: 12px; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; display: none; }
+    .info-section { margin-top: 36px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .info-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 22px; box-shadow: 0 10px 28px rgba(15,23,42,0.05); }
+    .info-card h3 { margin: 0 0 12px; font-size: 20px; color: #111827; }
+    .info-card p { margin: 0; color: #6b7280; line-height: 1.6; }
+    .footer { background: var(--nav); color: #cbd5e1; padding: 26px 0; margin-top: 40px; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .footer small { color: #94a3b8; }
+    .modal.hidden { display: none; }
+    .modal { position: fixed; inset: 0; z-index: 999; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.65); }
+    .modal-content { position: relative; z-index: 1; width: min(820px, 100%); background: #fff; border-radius: 20px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25); padding: 24px; max-height: 90vh; overflow: auto; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+    .modal-header h2 { margin: 0; font-size: 24px; color: #0f172a; }
+    .modal-close { border: none; background: #e5e7eb; color: #111827; width: 40px; height: 40px; border-radius: 10px; font-size: 24px; cursor: pointer; line-height: 1; }
+    .modal-close:hover { background: #d1d5db; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-field { display: flex; flex-direction: column; gap: 8px; }
+    .form-field label { font-size: 14px; font-weight: 700; color: #374151; }
+    .form-field input, .form-field select, .form-field textarea { width: 100%; padding: 12px 13px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 14px; background: #fff; font-family: inherit; }
+    .form-field textarea { min-height: 110px; resize: vertical; }
+    .form-field.full { grid-column: 1 / -1; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 22px; }
+    @media (max-width: 1100px) {
+      .controls-grid { grid-template-columns: 1fr 1fr; }
+      .info-section { grid-template-columns: 1fr; }
+      .topbar-inner { grid-template-columns: 1fr; height: auto; }
+      .logo { justify-content: flex-start; padding: 14px 0 8px; }
+      .nav { grid-template-columns: repeat(5, 1fr); min-height: 56px; }
     }
-
-    .info-section {
-      margin-top: 36px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .info-card {
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 10px 28px rgba(15,23,42,0.05);
-    }
-
-    .info-card h3 {
-      margin: 0 0 12px;
-      font-size: 20px;
-      color: #111827;
-    }
-
-    .info-card p {
-      margin: 0;
-      color: #6b7280;
-      line-height: 1.6;
-    }
-
-    .footer {
-      background: #0f172a;
-      color: #cbd5e1;
-      padding: 26px 0;
-      margin-top: 40px;
-    }
-
-    .footer-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .footer small {
-      color: #94a3b8;
-    }
-
-    @media (max-width: 1024px) {
-      .controls-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .info-section {
-        grid-template-columns: 1fr;
-      }
-    }
-
     @media (max-width: 700px) {
-      .controls-grid {
-        grid-template-columns: 1fr;
-      }
-
-      th, td {
-        font-size: 13px;
-        padding: 12px;
-      }
-
-      .table-wrap {
-        overflow-x: auto;
-      }
-
-      table {
-        min-width: 900px;
-      }
+      .controls-grid { grid-template-columns: 1fr; }
+      .table-wrap { overflow-x: auto; }
+      table { min-width: 1200px; }
+      .nav { grid-template-columns: 1fr 1fr; }
+      .nav a { justify-content: flex-start; padding-left: 16px; }
+      .form-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <div class="container topbar-inner">
-      <div class="logo">Service<span>MS</span></div>
-
+    <div class="topbar-inner">
+      <a href="/index.html" class="logo">Service<span>MS</span></a>
       <nav class="nav">
-        <a href="/index.html">Главная</a>
         <a href="/equipment.html" class="active">Оборудование</a>
         <a href="/clients.html">Клиенты</a>
         <a href="/repair-requests.html">Заявки</a>
@@ -325,11 +118,7 @@
   <section class="hero">
     <div class="container">
       <h1>Каталог оборудования</h1>
-      <p>
-        Раздел предназначен для просмотра единиц роботизированного оборудования,
-        их текущего состояния, моделей, серийных номеров, локаций и связи с клиентами.
-        Здесь можно быстро анализировать состав парка техники и текущий статус эксплуатации.
-      </p>
+      <p>Раздел предназначен для просмотра единиц роботизированного оборудования, их текущего состояния, моделей, серийных номеров, локаций и связи с клиентами.</p>
     </div>
   </section>
 
@@ -351,21 +140,7 @@
 
           <div class="field">
             <label for="searchInput">Поиск</label>
-            <input
-              id="searchInput"
-              type="text"
-              placeholder="Введите инвентарный или серийный номер"
-            />
-          </div>
-
-          <div class="field">
-            <label for="searchHint">Подсказка</label>
-            <input
-              id="searchHint"
-              type="text"
-              value="Поиск работает по inventoryNumber и serialNumber"
-              disabled
-            />
+            <input id="searchInput" type="text" placeholder="Инвентарный или серийный номер" />
           </div>
 
           <div class="field">
@@ -373,6 +148,7 @@
             <div class="buttons">
               <button class="btn btn-primary" id="applyBtn">Применить</button>
               <button class="btn btn-secondary" id="resetBtn">Сбросить</button>
+              <button class="btn btn-primary" id="createBtn">+ Добавить</button>
             </div>
           </div>
         </div>
@@ -394,6 +170,7 @@
               <th>Модель</th>
               <th>Производитель</th>
               <th>Клиент</th>
+              <th>Действия</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -403,26 +180,15 @@
       <div class="info-section">
         <div class="info-card">
           <h3>Что отображается в каталоге</h3>
-          <p>
-            Для каждой единицы техники отображаются идентификаторы, текущий статус,
-            привязка к модели, местоположение и сведения о клиенте, если оборудование уже закреплено.
-          </p>
+          <p>Для каждой единицы техники отображаются идентификаторы, текущий статус, привязка к модели, местоположение и сведения о клиенте.</p>
         </div>
-
         <div class="info-card">
           <h3>Для чего нужен фильтр</h3>
-          <p>
-            Фильтрация по статусу позволяет быстро выделять доступное, арендованное,
-            находящееся в обслуживании или неисправное оборудование для дальнейшей работы.
-          </p>
+          <p>Фильтрация по статусу позволяет быстро выделять доступное, арендованное, обслуживаемое или неисправное оборудование.</p>
         </div>
-
         <div class="info-card">
           <h3>Для чего нужен поиск</h3>
-          <p>
-            Поиск помогает быстро найти конкретную единицу техники по инвентарному
-            или серийному номеру без просмотра полного списка оборудования.
-          </p>
+          <p>Поиск помогает быстро найти конкретную единицу техники по инвентарному или серийному номеру без просмотра полного списка.</p>
         </div>
       </div>
     </div>
@@ -430,13 +196,66 @@
 
   <footer class="footer">
     <div class="container footer-inner">
-      <div>
-        <strong>ServiceMS</strong><br />
-        <small>Каталог роботизированного оборудования и управление его статусами</small>
-      </div>
+      <div><strong>ServiceMS</strong><br /><small>Каталог роботизированного оборудования и управление его статусами</small></div>
       <small>© 2026 Service Management System</small>
     </div>
   </footer>
+
+  <div id="equipmentModal" class="modal hidden">
+    <div class="modal-overlay" id="equipmentModalOverlay"></div>
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="equipmentModalTitle">Добавить оборудование</h2>
+        <button class="modal-close" id="equipmentModalCloseBtn">×</button>
+      </div>
+
+      <form id="equipmentForm">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="inventoryNumber">Инвентарный номер</label>
+            <input type="text" id="inventoryNumber" name="inventoryNumber" />
+          </div>
+
+          <div class="form-field">
+            <label for="serialNumber">Серийный номер</label>
+            <input type="text" id="serialNumber" name="serialNumber" />
+          </div>
+
+          <div class="form-field">
+            <label for="status">Статус</label>
+            <select id="status" name="status">
+              <option value="AVAILABLE">AVAILABLE</option>
+              <option value="RENTED">RENTED</option>
+              <option value="IN_SERVICE">IN_SERVICE</option>
+              <option value="BROKEN">BROKEN</option>
+              <option value="DECOMMISSIONED">DECOMMISSIONED</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="location">Локация</label>
+            <input type="text" id="location" name="location" />
+          </div>
+
+          <div class="form-field">
+            <label for="modelId">ID модели</label>
+            <input type="number" id="modelId" name="modelId" />
+          </div>
+
+          <div class="form-field">
+            <label for="clientId">ID клиента</label>
+            <input type="number" id="clientId" name="clientId" />
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+          <button type="button" class="btn btn-secondary" id="equipmentCancelBtn">Отмена</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script>
     const tbody = document.querySelector('#equipmentTable tbody');
@@ -444,8 +263,25 @@
     const searchInput = document.getElementById('searchInput');
     const applyBtn = document.getElementById('applyBtn');
     const resetBtn = document.getElementById('resetBtn');
+    const createBtn = document.getElementById('createBtn');
     const summaryText = document.getElementById('summaryText');
     const messageBox = document.getElementById('messageBox');
+
+    const modal = document.getElementById('equipmentModal');
+    const modalOverlay = document.getElementById('equipmentModalOverlay');
+    const modalCloseBtn = document.getElementById('equipmentModalCloseBtn');
+    const cancelBtn = document.getElementById('equipmentCancelBtn');
+    const modalTitle = document.getElementById('equipmentModalTitle');
+    const form = document.getElementById('equipmentForm');
+
+    const inventoryNumberInput = document.getElementById('inventoryNumber');
+    const serialNumberInput = document.getElementById('serialNumber');
+    const statusInput = document.getElementById('status');
+    const locationInput = document.getElementById('location');
+    const modelIdInput = document.getElementById('modelId');
+    const clientIdInput = document.getElementById('clientId');
+
+    let editingId = null;
 
     function showMessage(text, isError = false) {
       messageBox.style.display = 'block';
@@ -464,6 +300,35 @@
       return `<span class="status-badge status-${status}">${status}</span>`;
     }
 
+    function openModal(mode = 'create', item = null) {
+      editingId = mode === 'edit' && item ? item.id : null;
+      modalTitle.textContent = mode === 'edit' ? 'Редактировать оборудование' : 'Добавить оборудование';
+
+      inventoryNumberInput.value = item?.inventoryNumber ?? '';
+      serialNumberInput.value = item?.serialNumber ?? '';
+      statusInput.value = item?.status ?? 'AVAILABLE';
+      locationInput.value = item?.location ?? '';
+      modelIdInput.value = item?.modelId ?? '';
+      clientIdInput.value = item?.clientId ?? '';
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      editingId = null;
+      form.reset();
+      statusInput.value = 'AVAILABLE';
+    }
+
+    modalOverlay.addEventListener('click', closeModal);
+    modalCloseBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+
+    createBtn.addEventListener('click', () => {
+      openModal('create');
+    });
+
     async function loadEquipment() {
       try {
         clearMessage();
@@ -471,24 +336,15 @@
         tbody.innerHTML = '';
 
         const params = new URLSearchParams();
-
-        if (statusFilter.value) {
-          params.append('status', statusFilter.value);
-        }
-
-        if (searchInput.value.trim()) {
-          params.append('search', searchInput.value.trim());
-        }
+        if (statusFilter.value) params.append('status', statusFilter.value);
+        if (searchInput.value.trim()) params.append('search', searchInput.value.trim());
 
         const queryString = params.toString();
         const url = queryString ? `/equipment?${queryString}` : '/equipment';
 
         const response = await fetch(url);
         const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || 'Ошибка при загрузке оборудования');
-        }
+        if (!response.ok) throw new Error(data.error || 'Ошибка при загрузке оборудования');
 
         if (!Array.isArray(data) || data.length === 0) {
           summaryText.textContent = 'Найдено записей: 0';
@@ -498,7 +354,6 @@
 
         data.forEach(item => {
           const tr = document.createElement('tr');
-
           tr.innerHTML = `
             <td>${item.id ?? ''}</td>
             <td>${item.inventoryNumber ?? ''}</td>
@@ -508,8 +363,13 @@
             <td>${item.model?.name ?? '—'}</td>
             <td>${item.model?.manufacturer ?? '—'}</td>
             <td>${item.client?.companyName ?? '—'}</td>
+            <td>
+              <div class="actions">
+                <button class="action-btn action-edit" onclick="editItem(${item.id})">✏️</button>
+                <button class="action-btn action-delete" onclick="deleteItem(${item.id})">❌</button>
+              </div>
+            </td>
           `;
-
           tbody.appendChild(tr);
         });
 
@@ -521,18 +381,85 @@
       }
     }
 
-    applyBtn.addEventListener('click', loadEquipment);
+    async function deleteItem(id) {
+      if (!confirm('Удалить оборудование?')) return;
 
+      try {
+        const res = await fetch(`/equipment/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || 'Ошибка удаления');
+
+        showMessage(data.message || 'Оборудование удалено');
+        loadEquipment();
+      } catch (err) {
+        showMessage(err.message || 'Ошибка удаления', true);
+      }
+    }
+
+    async function editItem(id) {
+      try {
+        const res = await fetch(`/equipment/${id}`);
+        const item = await res.json();
+        if (!res.ok) throw new Error(item.error || 'Не удалось получить запись');
+
+        openModal('edit', item);
+      } catch (err) {
+        showMessage(err.message || 'Ошибка открытия формы редактирования', true);
+      }
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const payload = {
+        inventoryNumber: inventoryNumberInput.value.trim(),
+        serialNumber: serialNumberInput.value.trim(),
+        status: statusInput.value,
+        location: locationInput.value.trim() || null,
+        modelId: modelIdInput.value ? Number(modelIdInput.value) : null,
+        clientId: clientIdInput.value ? Number(clientIdInput.value) : null,
+      };
+
+      try {
+        let response;
+
+        if (editingId) {
+          response = await fetch(`/equipment/${editingId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+        } else {
+          response = await fetch('/equipment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+        }
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Ошибка сохранения');
+        }
+
+        showMessage(editingId ? 'Оборудование обновлено' : 'Оборудование создано');
+        closeModal();
+        loadEquipment();
+      } catch (err) {
+        showMessage(err.message || 'Ошибка сохранения', true);
+      }
+    });
+
+    applyBtn.addEventListener('click', loadEquipment);
     resetBtn.addEventListener('click', () => {
       statusFilter.value = '';
       searchInput.value = '';
       loadEquipment();
     });
-
     searchInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        loadEquipment();
-      }
+      if (event.key === 'Enter') loadEquipment();
     });
 
     loadEquipment();

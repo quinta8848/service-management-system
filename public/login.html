@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Вход | ServiceMS</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a, #1e3a8a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1f2937;
+    }
+
+    .card {
+      width: min(440px, calc(100% - 32px));
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 32px;
+      color: #0f172a;
+    }
+
+    p {
+      margin: 0 0 22px;
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #374151;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #2563eb;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px 14px;
+      border: none;
+      border-radius: 12px;
+      background: #2563eb;
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+    }
+
+    .message {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .message.error {
+      display: block;
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    .message.success {
+      display: block;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+    .hint {
+      margin-top: 16px;
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>ServiceMS</h1>
+    <p>Вход в систему учета и обслуживания роботизированного оборудования.</p>
+
+    <form id="loginForm">
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" autocomplete="username" required />
+      </div>
+
+      <div class="field">
+        <label for="password">Пароль</label>
+        <input id="password" type="password" autocomplete="current-password" required />
+      </div>
+
+      <button class="btn" type="submit">Войти</button>
+    </form>
+
+    <div id="message" class="message"></div>
+
+    <div class="hint">
+      Для текущих демонстрационных данных пароль может совпадать со значением поля <b>passwordHash</b> в базе.
+      Позже мы переведём это на полноценные хеши и более строгую проверку.
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const message = document.getElementById('message');
+
+    function showMessage(text, type) {
+      message.className = `message ${type}`;
+      message.textContent = text;
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch('/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Ошибка входа');
+        }
+
+        localStorage.setItem('servicems_token', data.token);
+        localStorage.setItem('servicems_user', JSON.stringify(data.user));
+
+        showMessage('Вход выполнен успешно. Перенаправление...', 'success');
+
+        setTimeout(() => {
+          window.location.href = '/index.html';
+        }, 700);
+      } catch (error) {
+        showMessage(error.message || 'Не удалось войти', 'error');
+      }
+    });
+  </script>
+</body>
+</html>

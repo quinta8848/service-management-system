@@ -5,66 +5,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Клиенты | ServiceMS</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       color: #1f2937;
       background: #f5f7fb;
     }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .container {
-      width: min(1200px, calc(100% - 40px));
-      margin: 0 auto;
-    }
+    a { text-decoration: none; color: inherit; }
+    .container { width: min(1200px, calc(100% - 40px)); margin: 0 auto; }
 
     .topbar {
-      background: #0f172a;
+      background: linear-gradient(90deg, #0f172a, #1e3a8a);
       color: #fff;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      width: 100%;
     }
-
     .topbar-inner {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 200px 1fr;
       align-items: center;
-      min-height: 72px;
-      gap: 20px;
-      flex-wrap: wrap;
+      height: 70px;
+      width: 100%;
     }
-
     .logo {
-      font-size: 24px;
-      font-weight: 700;
-    }
-
-    .logo span {
-      color: #60a5fa;
-    }
-
-    .nav {
       display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      height: 100%;
     }
-
+    .logo span { color: #60a5fa; }
+    .nav { display: grid; grid-template-columns: repeat(5, 1fr); height: 100%; }
     .nav a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: #e5e7eb;
       font-size: 15px;
       transition: 0.2s;
+      position: relative;
+      height: 100%;
     }
-
-    .nav a:hover,
-    .nav a.active {
-      color: #60a5fa;
+    .nav a:hover { background: rgba(255,255,255,0.05); color: #60a5fa; }
+    .nav a.active { color: #60a5fa; }
+    .nav a.active::after {
+      content: "";
+      position: absolute;
+      bottom: 10px;
+      width: 40%;
+      height: 2px;
+      background: #60a5fa;
+      border-radius: 2px;
     }
 
     .hero {
@@ -72,24 +65,19 @@
       color: #fff;
       padding: 56px 0;
     }
-
     .hero h1 {
       margin: 0 0 14px;
       font-size: clamp(30px, 4vw, 46px);
     }
-
     .hero p {
       margin: 0;
-      max-width: 850px;
+      max-width: 900px;
       color: #dbeafe;
       line-height: 1.6;
       font-size: 17px;
     }
 
-    .section {
-      padding: 36px 0 60px;
-    }
-
+    .section { padding: 36px 0 60px; }
     .controls {
       background: #fff;
       border: 1px solid #e5e7eb;
@@ -100,26 +88,22 @@
       position: relative;
       z-index: 2;
     }
-
     .controls-grid {
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 14px;
       align-items: end;
     }
-
     .field {
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
-
     .field label {
       font-size: 14px;
       font-weight: 700;
       color: #374151;
     }
-
     .field input {
       width: 100%;
       padding: 11px 12px;
@@ -128,13 +112,11 @@
       font-size: 14px;
       background: #fff;
     }
-
     .buttons {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
     }
-
     .btn {
       padding: 11px 16px;
       border: none;
@@ -144,31 +126,12 @@
       transition: 0.2s;
       font-size: 14px;
     }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-secondary { background: #e5e7eb; color: #111827; }
+    .btn-secondary:hover { background: #d1d5db; }
 
-    .btn-primary {
-      background: #2563eb;
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: #1d4ed8;
-    }
-
-    .btn-secondary {
-      background: #e5e7eb;
-      color: #111827;
-    }
-
-    .btn-secondary:hover {
-      background: #d1d5db;
-    }
-
-    .summary {
-      margin-top: 18px;
-      color: #64748b;
-      font-size: 15px;
-    }
-
+    .summary { margin-top: 18px; color: #64748b; font-size: 15px; }
     .table-wrap {
       margin-top: 24px;
       background: #fff;
@@ -177,12 +140,7 @@
       box-shadow: 0 12px 30px rgba(15,23,42,0.06);
       overflow: hidden;
     }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
+    table { width: 100%; border-collapse: collapse; }
     th, td {
       padding: 14px 16px;
       border-bottom: 1px solid #e5e7eb;
@@ -190,7 +148,6 @@
       vertical-align: top;
       font-size: 14px;
     }
-
     th {
       background: #f8fafc;
       color: #111827;
@@ -198,10 +155,19 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
+    tbody tr:hover { background: #f8fbff; }
 
-    tbody tr:hover {
-      background: #f8fbff;
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .action-btn {
+      border: none;
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
     }
+    .action-edit { background: #dbeafe; color: #1d4ed8; }
+    .action-delete { background: #fee2e2; color: #b91c1c; }
 
     .message {
       margin-top: 20px;
@@ -219,7 +185,6 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
     }
-
     .info-card {
       background: #fff;
       border: 1px solid #e5e7eb;
@@ -227,13 +192,11 @@
       padding: 22px;
       box-shadow: 0 10px 28px rgba(15,23,42,0.05);
     }
-
     .info-card h3 {
       margin: 0 0 12px;
       font-size: 20px;
       color: #111827;
     }
-
     .info-card p {
       margin: 0;
       color: #6b7280;
@@ -246,7 +209,6 @@
       padding: 26px 0;
       margin-top: 40px;
     }
-
     .footer-inner {
       display: flex;
       justify-content: space-between;
@@ -254,39 +216,110 @@
       gap: 20px;
       flex-wrap: wrap;
     }
+    .footer small { color: #94a3b8; }
 
-    .footer small {
-      color: #94a3b8;
+    .modal.hidden { display: none; }
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
-
+    .modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+    }
+    .modal-content {
+      position: relative;
+      z-index: 1;
+      width: min(760px, 100%);
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+      padding: 24px;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .modal-header h2 {
+      margin: 0;
+      font-size: 24px;
+      color: #0f172a;
+    }
+    .modal-close {
+      border: none;
+      background: #e5e7eb;
+      color: #111827;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      font-size: 24px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .modal-close:hover { background: #d1d5db; }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .form-field label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #374151;
+    }
+    .form-field input {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      font-size: 14px;
+      background: #fff;
+    }
+    .form-field.full {
+      grid-column: 1 / -1;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 22px;
+    }
     @media (max-width: 900px) {
-      .info-section {
-        grid-template-columns: 1fr;
-      }
-
-      .controls-grid {
-        grid-template-columns: 1fr;
-      }
+      .info-section { grid-template-columns: 1fr; }
+      .controls-grid { grid-template-columns: 1fr; }
+      .topbar-inner { grid-template-columns: 1fr; height: auto; }
+      .logo { justify-content: flex-start; padding: 14px 0 8px; }
+      .nav { grid-template-columns: repeat(5, 1fr); min-height: 56px; }
+      .nav a { padding: 12px 8px; font-size: 13px; }
     }
-
     @media (max-width: 700px) {
-      .table-wrap {
-        overflow-x: auto;
-      }
-
-      table {
-        min-width: 850px;
-      }
+      .table-wrap { overflow-x: auto; }
+      table { min-width: 980px; }
+      .nav { grid-template-columns: 1fr 1fr; }
+      .nav a { justify-content: flex-start; padding-left: 16px; }
+      .form-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <div class="container topbar-inner">
-      <div class="logo">Service<span>MS</span></div>
-
+    <div class="topbar-inner">
+      <a href="/index.html" class="logo">Service<span>MS</span></a>
       <nav class="nav">
-        <a href="/index.html">Главная</a>
         <a href="/equipment.html">Оборудование</a>
         <a href="/clients.html" class="active">Клиенты</a>
         <a href="/repair-requests.html">Заявки</a>
@@ -299,11 +332,7 @@
   <section class="hero">
     <div class="container">
       <h1>Клиенты</h1>
-      <p>
-        Раздел предназначен для хранения клиентской базы компании, включая организации,
-        контактных лиц и связанную информацию. Здесь можно просматривать заказчиков,
-        с которыми работает система учета и обслуживания оборудования.
-      </p>
+      <p>Раздел предназначен для хранения клиентской базы компании, включая организации, контактных лиц и связанную информацию. Здесь можно просматривать заказчиков, с которыми работает система учета и обслуживания оборудования.</p>
     </div>
   </section>
 
@@ -313,22 +342,17 @@
         <div class="controls-grid">
           <div class="field">
             <label for="searchInput">Поиск</label>
-            <input
-              id="searchInput"
-              type="text"
-              placeholder="Введите название компании или контактное лицо"
-            />
+            <input id="searchInput" type="text" placeholder="Название компании или контактное лицо" />
           </div>
-
           <div class="field">
             <label>Действия</label>
             <div class="buttons">
               <button class="btn btn-primary" id="applyBtn">Применить</button>
               <button class="btn btn-secondary" id="resetBtn">Сбросить</button>
+              <button class="btn btn-primary" id="createBtn">+ Добавить</button>
             </div>
           </div>
         </div>
-
         <div class="summary" id="summaryText">Загрузка данных...</div>
       </div>
 
@@ -344,6 +368,7 @@
               <th>Телефон</th>
               <th>Email</th>
               <th>Адрес</th>
+              <th>Действия</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -353,26 +378,15 @@
       <div class="info-section">
         <div class="info-card">
           <h3>Назначение раздела</h3>
-          <p>
-            Модуль клиентов хранит организации и контактных лиц, с которыми работает
-            компания при продаже, аренде и обслуживании роботизированного оборудования.
-          </p>
+          <p>Модуль клиентов хранит организации и контактных лиц, с которыми работает компания при продаже, аренде и обслуживании оборудования.</p>
         </div>
-
         <div class="info-card">
           <h3>Что можно анализировать</h3>
-          <p>
-            По клиентской базе можно отслеживать, кому принадлежит оборудование,
-            кто подаёт заявки на ремонт и какие компании участвуют в сервисном процессе.
-          </p>
+          <p>По клиентской базе можно отслеживать, кому принадлежит оборудование, кто подаёт заявки на ремонт и какие компании участвуют в сервисном процессе.</p>
         </div>
-
         <div class="info-card">
           <h3>Практическая польза</h3>
-          <p>
-            Централизованный учет клиентов позволяет не дублировать контактные данные,
-            быстрее находить нужные организации и связывать их с оборудованием и заявками.
-          </p>
+          <p>Централизованный учет клиентов позволяет не дублировать контактные данные и быстрее находить нужные организации.</p>
         </div>
       </div>
     </div>
@@ -380,21 +394,78 @@
 
   <footer class="footer">
     <div class="container footer-inner">
-      <div>
-        <strong>ServiceMS</strong><br />
-        <small>Клиентская база и связь заказчиков с оборудованием и сервисными процессами</small>
-      </div>
+      <div><strong>ServiceMS</strong><br /><small>Клиентская база и связь заказчиков с оборудованием и сервисными процессами</small></div>
       <small>© 2026 Service Management System</small>
     </div>
   </footer>
+
+  <div id="clientModal" class="modal hidden">
+    <div class="modal-overlay" id="clientModalOverlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="clientModalTitle">Добавить клиента</h2>
+        <button class="modal-close" id="clientModalCloseBtn">×</button>
+      </div>
+
+      <form id="clientForm">
+        <div class="form-grid">
+          <div class="form-field full">
+            <label for="companyName">Название компании</label>
+            <input type="text" id="companyName" name="companyName" />
+          </div>
+
+          <div class="form-field">
+            <label for="contactPerson">Контактное лицо</label>
+            <input type="text" id="contactPerson" name="contactPerson" />
+          </div>
+
+          <div class="form-field">
+            <label for="phone">Телефон</label>
+            <input type="text" id="phone" name="phone" />
+          </div>
+
+          <div class="form-field full">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" />
+          </div>
+
+          <div class="form-field full">
+            <label for="address">Адрес</label>
+            <input type="text" id="address" name="address" />
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+          <button type="button" class="btn btn-secondary" id="clientCancelBtn">Отмена</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script>
     const tbody = document.querySelector('#clientsTable tbody');
     const searchInput = document.getElementById('searchInput');
     const applyBtn = document.getElementById('applyBtn');
     const resetBtn = document.getElementById('resetBtn');
+    const createBtn = document.getElementById('createBtn');
     const summaryText = document.getElementById('summaryText');
     const messageBox = document.getElementById('messageBox');
+
+    const clientModal = document.getElementById('clientModal');
+    const clientModalTitle = document.getElementById('clientModalTitle');
+    const clientModalCloseBtn = document.getElementById('clientModalCloseBtn');
+    const clientModalOverlay = document.getElementById('clientModalOverlay');
+    const clientCancelBtn = document.getElementById('clientCancelBtn');
+    const clientForm = document.getElementById('clientForm');
+
+    const companyNameInput = document.getElementById('companyName');
+    const contactPersonInput = document.getElementById('contactPerson');
+    const phoneInput = document.getElementById('phone');
+    const emailInput = document.getElementById('email');
+    const addressInput = document.getElementById('address');
+
+    let editingClientId = null;
 
     function showMessage(text, isError = false) {
       messageBox.style.display = 'block';
@@ -409,6 +480,29 @@
       messageBox.textContent = '';
     }
 
+    function openModal(mode = 'create', item = null) {
+      editingClientId = mode === 'edit' && item ? item.id : null;
+      clientModalTitle.textContent = mode === 'edit' ? 'Редактировать клиента' : 'Добавить клиента';
+
+      companyNameInput.value = item?.companyName ?? '';
+      contactPersonInput.value = item?.contactPerson ?? '';
+      phoneInput.value = item?.phone ?? '';
+      emailInput.value = item?.email ?? '';
+      addressInput.value = item?.address ?? '';
+
+      clientModal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      clientModal.classList.add('hidden');
+      editingClientId = null;
+      clientForm.reset();
+    }
+
+    clientModalCloseBtn.addEventListener('click', closeModal);
+    clientCancelBtn.addEventListener('click', closeModal);
+    clientModalOverlay.addEventListener('click', closeModal);
+
     async function loadClients() {
       try {
         clearMessage();
@@ -417,15 +511,10 @@
 
         const response = await fetch('/clients');
         const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || 'Ошибка при загрузке клиентов');
-        }
+        if (!response.ok) throw new Error(data.error || 'Ошибка при загрузке клиентов');
 
         let filteredData = data;
-
         const search = searchInput.value.trim().toLowerCase();
-
         if (search) {
           filteredData = data.filter(item => {
             const companyName = (item.companyName || '').toLowerCase();
@@ -442,7 +531,6 @@
 
         filteredData.forEach(item => {
           const tr = document.createElement('tr');
-
           tr.innerHTML = `
             <td>${item.id ?? ''}</td>
             <td>${item.companyName ?? '—'}</td>
@@ -450,8 +538,13 @@
             <td>${item.phone ?? '—'}</td>
             <td>${item.email ?? '—'}</td>
             <td>${item.address ?? '—'}</td>
+            <td>
+              <div class="actions">
+                <button class="action-btn action-edit" onclick="editItem(${item.id})">✏️</button>
+                <button class="action-btn action-delete" onclick="deleteItem(${item.id})">❌</button>
+              </div>
+            </td>
           `;
-
           tbody.appendChild(tr);
         });
 
@@ -463,19 +556,73 @@
       }
     }
 
-    applyBtn.addEventListener('click', loadClients);
-
-    resetBtn.addEventListener('click', () => {
-      searchInput.value = '';
-      loadClients();
-    });
-
-    searchInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
+    async function deleteItem(id) {
+      if (!confirm('Удалить клиента?')) return;
+      try {
+        const res = await fetch(`/clients/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Ошибка удаления');
+        showMessage(data.message || 'Удалено');
         loadClients();
+      } catch (err) {
+        showMessage(err.message || 'Ошибка удаления', true);
+      }
+    }
+
+    async function editItem(id) {
+      try {
+        const res = await fetch(`/clients/${id}`);
+        const item = await res.json();
+        if (!res.ok) throw new Error(item.error || 'Не удалось получить запись');
+        openModal('edit', item);
+      } catch (err) {
+        showMessage(err.message || 'Ошибка открытия формы редактирования', true);
+      }
+    }
+
+    createBtn.addEventListener('click', () => openModal('create'));
+
+    clientForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const payload = {
+        companyName: companyNameInput.value.trim(),
+        contactPerson: contactPersonInput.value.trim(),
+        phone: phoneInput.value.trim(),
+        email: emailInput.value.trim(),
+        address: addressInput.value.trim(),
+      };
+
+      try {
+        let response;
+        if (editingClientId) {
+          response = await fetch(`/clients/${editingClientId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        } else {
+          response = await fetch('/clients', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        }
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Ошибка сохранения');
+
+        showMessage(editingClientId ? 'Клиент обновлен' : 'Клиент создан');
+        closeModal();
+        loadClients();
+      } catch (err) {
+        showMessage(err.message || 'Ошибка сохранения', true);
       }
     });
 
+    applyBtn.addEventListener('click', loadClients);
+    resetBtn.addEventListener('click', () => { searchInput.value = ''; loadClients(); });
+    searchInput.addEventListener('keydown', (event) => { if (event.key === 'Enter') loadClients(); });
     loadClients();
   </script>
 </body>
