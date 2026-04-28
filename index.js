@@ -10,6 +10,7 @@ const app = express();
 const PORT = 8848;
 
 app.use(express.json());
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
   res.send('Service Management System работает');

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Обслуживание | ServiceMS</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #1f2937;
+      background: #f5f7fb;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      width: min(1200px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      background: #0f172a;
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .topbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 72px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .logo span {
+      color: #60a5fa;
+    }
+
+    .nav {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      color: #e5e7eb;
+      font-size: 15px;
+      transition: 0.2s;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      color: #60a5fa;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0f172a, #1e3a8a);
+      color: #fff;
+      padding: 56px 0;
+    }
+
+    .hero h1 {
+      margin: 0 0 14px;
+      font-size: clamp(30px, 4vw, 46px);
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 850px;
+      color: #dbeafe;
+      line-height: 1.6;
+      font-size: 17px;
+    }
+
+    .section {
+      padding: 36px 0 60px;
+    }
+
+    .controls {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 10px 28px rgba(15,23,42,0.06);
+      margin-top: -30px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 220px 220px auto;
+      gap: 14px;
+      align-items: end;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #374151;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 11px 16px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .btn-secondary:hover {
+      background: #d1d5db;
+    }
+
+    .summary {
+      margin-top: 18px;
+      color: #64748b;
+      font-size: 15px;
+    }
+
+    .table-wrap {
+      margin-top: 24px;
+      background: #fff;
+      border-radius: 18px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 12px 30px rgba(15,23,42,0.06);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #111827;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    tbody tr:hover {
+      background: #f8fbff;
+    }
+
+    .status-badge,
+    .type-badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .status-PLANNED { background: #2563eb; }
+    .status-DONE { background: #16a34a; }
+    .status-OVERDUE { background: #dc2626; }
+    .status-CANCELED { background: #6b7280; }
+
+    .type-INSPECTION { background: #475569; }
+    .type-MAINTENANCE { background: #2563eb; }
+    .type-DIAGNOSTICS { background: #7c3aed; }
+    .type-REPAIR { background: #d97706; }
+
+    .message {
+      margin-top: 20px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      display: none;
+    }
+
+    .info-section {
+      margin-top: 36px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .info-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 10px 28px rgba(15,23,42,0.05);
+    }
+
+    .info-card h3 {
+      margin: 0 0 12px;
+      font-size: 20px;
+      color: #111827;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .footer {
+      background: #0f172a;
+      color: #cbd5e1;
+      padding: 26px 0;
+      margin-top: 40px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer small {
+      color: #94a3b8;
+    }
+
+    @media (max-width: 1100px) {
+      .controls-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .info-section {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .controls-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 1200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="logo">Service<span>MS</span></div>
+
+      <nav class="nav">
+        <a href="/index.html">Главная</a>
+        <a href="/equipment.html">Оборудование</a>
+        <a href="/clients.html">Клиенты</a>
+        <a href="/repair-requests.html">Заявки</a>
+        <a href="/service-events.html" class="active">Обслуживание</a>
+        <a href="/users.html">Пользователи</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Сервисное обслуживание</h1>
+      <p>
+        Раздел предназначен для учета плановых и выполненных сервисных событий:
+        диагностики, технического обслуживания, инспекций и ремонтных работ.
+        Здесь отображается история сопровождения оборудования и текущий статус сервисных задач.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="controls">
+        <div class="controls-grid">
+          <div class="field">
+            <label for="searchInput">Поиск</label>
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="Введите описание работ или результат"
+            />
+          </div>
+
+          <div class="field">
+            <label for="statusFilter">Статус</label>
+            <select id="statusFilter">
+              <option value="">Все статусы</option>
+              <option value="PLANNED">PLANNED</option>
+              <option value="DONE">DONE</option>
+              <option value="OVERDUE">OVERDUE</option>
+              <option value="CANCELED">CANCELED</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="typeFilter">Тип события</label>
+            <select id="typeFilter">
+              <option value="">Все типы</option>
+              <option value="INSPECTION">INSPECTION</option>
+              <option value="MAINTENANCE">MAINTENANCE</option>
+              <option value="DIAGNOSTICS">DIAGNOSTICS</option>
+              <option value="REPAIR">REPAIR</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Действия</label>
+            <div class="buttons">
+              <button class="btn btn-primary" id="applyBtn">Применить</button>
+              <button class="btn btn-secondary" id="resetBtn">Сбросить</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary" id="summaryText">Загрузка данных...</div>
+      </div>
+
+      <div class="message" id="messageBox"></div>
+
+      <div class="table-wrap">
+        <table id="serviceTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Тип</th>
+              <th>Статус</th>
+              <th>Плановая дата</th>
+              <th>Дата выполнения</th>
+              <th>Описание работ</th>
+              <th>Результат</th>
+              <th>Оборудование</th>
+              <th>Инженер</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="info-section">
+        <div class="info-card">
+          <h3>Назначение раздела</h3>
+          <p>
+            Модуль обслуживания позволяет хранить данные о плановых и выполненных работах
+            по сопровождению оборудования на протяжении всего жизненного цикла эксплуатации.
+          </p>
+        </div>
+
+        <div class="info-card">
+          <h3>Что можно анализировать</h3>
+          <p>
+            Здесь можно отслеживать просроченные события, завершённые работы, типы обслуживания
+            и участие конкретных инженеров в сервисных операциях.
+          </p>
+        </div>
+
+        <div class="info-card">
+          <h3>Практическая польза</h3>
+          <p>
+            Система сервисных событий помогает не пропускать обязательные регламентные работы,
+            вести историю обслуживания и повышать надёжность роботизированного оборудования.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>ServiceMS</strong><br />
+        <small>Планирование и контроль сервисного сопровождения оборудования</small>
+      </div>
+      <small>© 2026 Service Management System</small>
+    </div>
+  </footer>
+
+  <script>
+    const tbody = document.querySelector('#serviceTable tbody');
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const typeFilter = document.getElementById('typeFilter');
+    const applyBtn = document.getElementById('applyBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const summaryText = document.getElementById('summaryText');
+    const messageBox = document.getElementById('messageBox');
+
+    function showMessage(text, isError = false) {
+      messageBox.style.display = 'block';
+      messageBox.textContent = text;
+      messageBox.style.background = isError ? '#fef2f2' : '#eff6ff';
+      messageBox.style.color = isError ? '#b91c1c' : '#1d4ed8';
+      messageBox.style.borderColor = isError ? '#fecaca' : '#bfdbfe';
+    }
+
+    function clearMessage() {
+      messageBox.style.display = 'none';
+      messageBox.textContent = '';
+    }
+
+    function createStatusBadge(status) {
+      return `<span class="status-badge status-${status}">${status}</span>`;
+    }
+
+    function createTypeBadge(type) {
+      return `<span class="type-badge type-${type}">${type}</span>`;
+    }
+
+    function formatDate(value) {
+      if (!value) return '—';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+      return date.toLocaleDateString('ru-RU');
+    }
+
+    async function loadServiceEvents() {
+      try {
+        clearMessage();
+        summaryText.textContent = 'Загрузка данных...';
+        tbody.innerHTML = '';
+
+        const response = await fetch('/service-events');
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Ошибка при загрузке сервисных событий');
+        }
+
+        let filteredData = data;
+
+        const search = searchInput.value.trim().toLowerCase();
+        const status = statusFilter.value;
+        const type = typeFilter.value;
+
+        if (search) {
+          filteredData = filteredData.filter(item => {
+            const workDescription = (item.workDescription || '').toLowerCase();
+            const result = (item.result || '').toLowerCase();
+            return workDescription.includes(search) || result.includes(search);
+          });
+        }
+
+        if (status) {
+          filteredData = filteredData.filter(item => item.status === status);
+        }
+
+        if (type) {
+          filteredData = filteredData.filter(item => item.type === type);
+        }
+
+        if (!Array.isArray(filteredData) || filteredData.length === 0) {
+          summaryText.textContent = 'Найдено записей: 0';
+          showMessage('По заданным параметрам сервисные события не найдены.');
+          return;
+        }
+
+        filteredData.forEach(item => {
+          const tr = document.createElement('tr');
+
+          tr.innerHTML = `
+            <td>${item.id ?? ''}</td>
+            <td>${createTypeBadge(item.type ?? '')}</td>
+            <td>${createStatusBadge(item.status ?? '')}</td>
+            <td>${formatDate(item.plannedDate)}</td>
+            <td>${formatDate(item.completedDate)}</td>
+            <td>${item.workDescription ?? '—'}</td>
+            <td>${item.result ?? '—'}</td>
+            <td>${item.equipment?.inventoryNumber ?? '—'}</td>
+            <td>${item.engineer?.name ?? '—'}</td>
+          `;
+
+          tbody.appendChild(tr);
+        });
+
+        summaryText.textContent = `Найдено записей: ${filteredData.length}`;
+      } catch (error) {
+        console.error('Ошибка загрузки сервисных событий:', error);
+        summaryText.textContent = 'Ошибка загрузки данных';
+        showMessage(error.message || 'Не удалось загрузить сервисные события.', true);
+      }
+    }
+
+    applyBtn.addEventListener('click', loadServiceEvents);
+
+    resetBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      statusFilter.value = '';
+      typeFilter.value = '';
+      loadServiceEvents();
+    });
+
+    searchInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        loadServiceEvents();
+      }
+    });
+
+    loadServiceEvents();
+  </script>
+</body>
+</html>
