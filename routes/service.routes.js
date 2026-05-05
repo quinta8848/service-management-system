@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../db/prisma');
 
+const { authenticateToken, requireRole } = require('../middleware/auth');
 const allowedServiceStatuses = ['PLANNED', 'DONE', 'OVERDUE', 'CANCELED'];
 const allowedServiceTypes = ['INSPECTION', 'MAINTENANCE', 'DIAGNOSTICS', 'REPAIR'];
 

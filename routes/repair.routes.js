@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const prisma = require('../db/prisma');
+const { authenticateToken, requireRole } = require('../middleware/auth');
 
 // GET /repair-requests - получить все заявки
 router.get('/', async (req, res) => {

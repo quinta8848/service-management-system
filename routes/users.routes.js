@@ -3,6 +3,7 @@ const router = express.Router();
 const prisma = require('../db/prisma');
 
 const allowedRoles = ['ADMIN', 'MANAGER', 'ENGINEER', 'CLIENT'];
+const { authenticateToken, requireRole } = require('../middleware/auth');
 
 // GET /users - получить всех пользователей
 router.get('/', async (req, res) => {
