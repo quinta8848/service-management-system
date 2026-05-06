@@ -1,4 +1,5 @@
 const express = require('express');
+
 const equipmentRoutes = require('./routes/equipment.routes');
 const clientsRoutes = require('./routes/clients.routes');
 const repairRoutes = require('./routes/repair.routes');
@@ -13,10 +14,9 @@ app.use(express.json());
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  res.send('Service Management System работает');
+  res.redirect('/index.html');
 });
 
-// подключаем маршруты оборудования
 app.use('/equipment', equipmentRoutes);
 app.use('/clients', clientsRoutes);
 app.use('/repair-requests', repairRoutes);

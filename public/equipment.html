@@ -258,6 +258,35 @@
   </div>
 
   <script>
+    function getToken() {
+      return localStorage.getItem('servicems_token');
+    }
+
+    function getCurrentUser() {
+      const user = localStorage.getItem('servicems_user');
+      return user ? JSON.parse(user) : null;
+    }
+
+    function authHeaders() {
+      const token = getToken();
+
+      return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      };
+    }
+
+    function checkAuth() {
+      const token = getToken();
+
+      if (!token) {
+        window.location.href = '/login.html';
+      }
+    }
+
+    checkAuth();
+
+    
     const tbody = document.querySelector('#equipmentTable tbody');
     const statusFilter = document.getElementById('statusFilter');
     const searchInput = document.getElementById('searchInput');
@@ -385,7 +414,10 @@
       if (!confirm('Удалить оборудование?')) return;
 
       try {
-        const res = await fetch(`/equipment/${id}`, { method: 'DELETE' });
+        const res = await fetch(`/equipment/${id}`, {
+          method: 'DELETE',
+          headers: authHeaders(),
+        });
         const data = await res.json();
 
         if (!res.ok) throw new Error(data.error || 'Ошибка удаления');
@@ -427,13 +459,13 @@
         if (editingId) {
           response = await fetch(`/equipment/${editingId}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: authHeaders(),
             body: JSON.stringify(payload),
           });
         } else {
           response = await fetch('/equipment', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: authHeaders(),
             body: JSON.stringify(payload),
           });
         }
