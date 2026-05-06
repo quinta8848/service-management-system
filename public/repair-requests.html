@@ -314,6 +314,12 @@
       color: #b91c1c;
     }
 
+
+    .muted-action {
+      color: #94a3b8;
+      font-weight: 700;
+    }
+
     .message {
       margin-top: 20px;
       padding: 14px 16px;
@@ -751,6 +757,54 @@
     checkAuth();
     renderAuthUser();
 
+
+    const pagePermissions = {
+      create: ['ADMIN', 'MANAGER'],
+      edit: ['ADMIN', 'MANAGER', 'ENGINEER'],
+      delete: ['ADMIN', 'MANAGER'],
+    };
+
+    function hasRole(allowedRoles) {
+      const user = getCurrentUser();
+      return Boolean(user && allowedRoles.includes(user.role));
+    }
+
+    function canCreate() {
+      return hasRole(pagePermissions.create);
+    }
+
+    function canEdit() {
+      return hasRole(pagePermissions.edit);
+    }
+
+    function canDelete() {
+      return hasRole(pagePermissions.delete);
+    }
+
+    function renderActionButtons(id) {
+      const buttons = [];
+
+      if (canEdit()) {
+        buttons.push(`<button class="action-btn action-edit" onclick="editItem(${id})">✏️</button>`);
+      }
+
+      if (canDelete()) {
+        buttons.push(`<button class="action-btn action-delete" onclick="deleteItem(${id})">❌</button>`);
+      }
+
+      return buttons.length ? buttons.join('') : '<span class="muted-action">—</span>';
+    }
+
+    function applyRolePermissions() {
+      const createButton = document.getElementById('createBtn');
+
+      if (createButton && !canCreate()) {
+        createButton.style.display = 'none';
+      }
+    }
+
+    applyRolePermissions();
+
     
     const tbody = document.querySelector('#requestsTable tbody');
     const searchInput = document.getElementById('searchInput');
@@ -866,8 +920,7 @@
             <td>${item.assignedEngineer?.name ?? '—'}</td>
             <td>
               <div class="actions">
-                <button class="action-btn action-edit" onclick="editItem(${item.id})">✏️</button>
-                <button class="action-btn action-delete" onclick="deleteItem(${item.id})">❌</button>
+                ${renderActionButtons(item.id)}
               </div>
             </td>
           `;
