@@ -22,7 +22,7 @@
     }
     .topbar-inner {
       display: grid;
-      grid-template-columns: 200px 1fr;
+      grid-template-columns: 200px 1fr 280px;
       align-items: center;
       height: 70px;
       width: 100%;
@@ -58,6 +58,36 @@
       height: 2px;
       background: #60a5fa;
       border-radius: 2px;
+    }
+
+
+    .user-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      height: 100%;
+      padding: 0 16px;
+      color: #e5e7eb;
+      border-left: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .logout-btn {
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: #60a5fa;
     }
 
     .hero {
@@ -303,6 +333,7 @@
       .controls-grid { grid-template-columns: 1fr; }
       .topbar-inner { grid-template-columns: 1fr; height: auto; }
       .logo { justify-content: flex-start; padding: 14px 0 8px; }
+      .user-panel { justify-content: flex-start; padding: 12px 16px; border-left: none; border-top: 1px solid rgba(255,255,255,0.10); }
       .nav { grid-template-columns: repeat(5, 1fr); min-height: 56px; }
       .nav a { padding: 12px 8px; font-size: 13px; }
     }
@@ -326,6 +357,10 @@
         <a href="/service-events.html">Обслуживание</a>
         <a href="/users.html">Пользователи</a>
       </nav>
+      <div class="user-panel">
+        <span id="currentUserInfo">Пользователь</span>
+        <button class="logout-btn" id="logoutBtn" type="button">Выйти</button>
+      </div>
     </div>
   </header>
 
@@ -444,35 +479,6 @@
   </div>
 
   <script>
-    function getToken() {
-      return localStorage.getItem('servicems_token');
-    }
-
-    function getCurrentUser() {
-      const user = localStorage.getItem('servicems_user');
-      return user ? JSON.parse(user) : null;
-    }
-
-    function authHeaders() {
-      const token = getToken();
-
-      return {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      };
-    }
-
-    function checkAuth() {
-      const token = getToken();
-
-      if (!token) {
-        window.location.href = '/login.html';
-      }
-    }
-
-    checkAuth();
-
-    
     const tbody = document.querySelector('#clientsTable tbody');
     const searchInput = document.getElementById('searchInput');
     const applyBtn = document.getElementById('applyBtn');
@@ -588,10 +594,7 @@
     async function deleteItem(id) {
       if (!confirm('Удалить клиента?')) return;
       try {
-        const res = await fetch(`/clients/${id}`, {
-          method: 'DELETE',
-          headers: authHeaders(),
-        });
+        const res = await fetch(`/clients/${id}`, { method: 'DELETE' });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Ошибка удаления');
         showMessage(data.message || 'Удалено');
@@ -630,13 +633,13 @@
         if (editingClientId) {
           response = await fetch(`/clients/${editingClientId}`, {
             method: 'PUT',
-            headers: authHeaders(),
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           });
         } else {
           response = await fetch('/clients', {
             method: 'POST',
-            headers: authHeaders(),
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           });
         }

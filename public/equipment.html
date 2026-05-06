@@ -6,49 +6,67 @@
   <title>Оборудование | ServiceMS</title>
   <style>
     * { box-sizing: border-box; }
-    :root {
-      --bg: #f5f7fb;
-      --surface: #ffffff;
-      --text: #1f2937;
-      --muted: #64748b;
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --border: #e5e7eb;
-      --nav: #0f172a;
-      --nav2: #1e3a8a;
-      --shadow: 0 12px 30px rgba(15,23,42,0.06);
-    }
-    body { margin: 0; font-family: Arial, sans-serif; color: var(--text); background: var(--bg); }
+    body { margin: 0; font-family: Arial, sans-serif; color: #1f2937; background: #f5f7fb; }
     a { text-decoration: none; color: inherit; }
     .container { width: min(1200px, calc(100% - 40px)); margin: 0 auto; }
-    .topbar { background: linear-gradient(90deg, var(--nav), var(--nav2)); color: #fff; width: 100%; }
-    .topbar-inner { display: grid; grid-template-columns: 200px 1fr; align-items: center; height: 70px; width: 100%; }
+    .topbar { background: linear-gradient(90deg, #0f172a, #1e3a8a); color: #fff; width: 100%; }
+    .topbar-inner { display: grid; grid-template-columns: 200px 1fr 280px; align-items: center; height: 70px; width: 100%; }
     .logo { display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: #fff; height: 100%; }
     .logo span { color: #60a5fa; }
     .nav { display: grid; grid-template-columns: repeat(5, 1fr); height: 100%; }
-    .nav a { display: flex; align-items: center; justify-content: center; color: #e5e7eb; font-size: 15px; transition: 0.2s; position: relative; height: 100%; padding: 0 10px; text-align: center; }
+    .nav a { display: flex; align-items: center; justify-content: center; color: #e5e7eb; font-size: 15px; transition: 0.2s; position: relative; height: 100%; }
     .nav a:hover { background: rgba(255,255,255,0.05); color: #60a5fa; }
     .nav a.active { color: #60a5fa; }
     .nav a.active::after { content: ""; position: absolute; bottom: 10px; width: 40%; height: 2px; background: #60a5fa; border-radius: 2px; }
-    .hero { background: linear-gradient(135deg, var(--nav), var(--nav2)); color: #fff; padding: 56px 0; }
+
+    .user-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      height: 100%;
+      padding: 0 16px;
+      color: #e5e7eb;
+      border-left: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .logout-btn {
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: #60a5fa;
+    }
+
+    .hero { background: linear-gradient(135deg, #0f172a, #1e3a8a); color: #fff; padding: 56px 0; }
     .hero h1 { margin: 0 0 14px; font-size: clamp(30px, 4vw, 46px); }
-    .hero p { margin: 0; max-width: 920px; color: #dbeafe; line-height: 1.6; font-size: 17px; }
+    .hero p { margin: 0; max-width: 850px; color: #dbeafe; line-height: 1.6; font-size: 17px; }
     .section { padding: 36px 0 60px; }
-    .controls { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 20px; box-shadow: var(--shadow); margin-top: -30px; position: relative; z-index: 2; }
-    .controls-grid { display: grid; grid-template-columns: 1fr 220px auto; gap: 14px; align-items: end; }
+    .controls { background: #fff; border: 1px solid #e5e7eb; border-radius: 18px; padding: 20px; box-shadow: 0 10px 28px rgba(15,23,42,0.06); margin-top: -30px; position: relative; z-index: 2; }
+    .controls-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; align-items: end; }
     .field { display: flex; flex-direction: column; gap: 8px; }
     .field label { font-size: 14px; font-weight: 700; color: #374151; }
     .field input, .field select { width: 100%; padding: 11px 12px; border: 1px solid #d1d5db; border-radius: 10px; font-size: 14px; background: #fff; }
     .buttons { display: flex; gap: 10px; flex-wrap: wrap; }
     .btn { padding: 11px 16px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 14px; }
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-primary:hover { background: #1d4ed8; }
     .btn-secondary { background: #e5e7eb; color: #111827; }
     .btn-secondary:hover { background: #d1d5db; }
-    .summary { margin-top: 18px; color: var(--muted); font-size: 15px; }
-    .table-wrap { margin-top: 24px; background: var(--surface); border-radius: 18px; border: 1px solid var(--border); box-shadow: var(--shadow); overflow: hidden; }
+    .summary { margin-top: 18px; color: #64748b; font-size: 15px; }
+    .table-wrap { margin-top: 24px; background: #fff; border-radius: 18px; border: 1px solid #e5e7eb; box-shadow: 0 12px 30px rgba(15,23,42,0.06); overflow: hidden; }
     table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 14px 16px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; font-size: 14px; }
+    th, td { padding: 14px 16px; border-bottom: 1px solid #e5e7eb; text-align: left; vertical-align: top; font-size: 14px; }
     th { background: #f8fafc; color: #111827; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; }
     tbody tr:hover { background: #f8fbff; }
     .status-badge { display: inline-block; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; color: #fff; white-space: nowrap; }
@@ -63,16 +81,17 @@
     .action-delete { background: #fee2e2; color: #b91c1c; }
     .message { margin-top: 20px; padding: 14px 16px; border-radius: 12px; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; display: none; }
     .info-section { margin-top: 36px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-    .info-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 22px; box-shadow: 0 10px 28px rgba(15,23,42,0.05); }
+    .info-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 18px; padding: 22px; box-shadow: 0 10px 28px rgba(15,23,42,0.05); }
     .info-card h3 { margin: 0 0 12px; font-size: 20px; color: #111827; }
     .info-card p { margin: 0; color: #6b7280; line-height: 1.6; }
-    .footer { background: var(--nav); color: #cbd5e1; padding: 26px 0; margin-top: 40px; }
+    .footer { background: #0f172a; color: #cbd5e1; padding: 26px 0; margin-top: 40px; }
     .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
     .footer small { color: #94a3b8; }
+
     .modal.hidden { display: none; }
     .modal { position: fixed; inset: 0; z-index: 999; display: flex; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.65); }
-    .modal-content { position: relative; z-index: 1; width: min(820px, 100%); background: #fff; border-radius: 20px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25); padding: 24px; max-height: 90vh; overflow: auto; }
+    .modal-content { position: relative; z-index: 1; width: min(820px, 100%); background: #fff; border-radius: 20px; box-shadow: 0 24px 60px rgba(0,0,0,0.25); padding: 24px; }
     .modal-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
     .modal-header h2 { margin: 0; font-size: 24px; color: #0f172a; }
     .modal-close { border: none; background: #e5e7eb; color: #111827; width: 40px; height: 40px; border-radius: 10px; font-size: 24px; cursor: pointer; line-height: 1; }
@@ -80,15 +99,14 @@
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .form-field { display: flex; flex-direction: column; gap: 8px; }
     .form-field label { font-size: 14px; font-weight: 700; color: #374151; }
-    .form-field input, .form-field select, .form-field textarea { width: 100%; padding: 12px 13px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 14px; background: #fff; font-family: inherit; }
-    .form-field textarea { min-height: 110px; resize: vertical; }
-    .form-field.full { grid-column: 1 / -1; }
+    .form-field input, .form-field select { width: 100%; padding: 12px 13px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 14px; background: #fff; }
     .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 22px; }
-    @media (max-width: 1100px) {
-      .controls-grid { grid-template-columns: 1fr 1fr; }
+    @media (max-width: 1024px) {
+      .controls-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .info-section { grid-template-columns: 1fr; }
       .topbar-inner { grid-template-columns: 1fr; height: auto; }
       .logo { justify-content: flex-start; padding: 14px 0 8px; }
+      .user-panel { justify-content: flex-start; padding: 12px 16px; border-left: none; border-top: 1px solid rgba(255,255,255,0.10); }
       .nav { grid-template-columns: repeat(5, 1fr); min-height: 56px; }
     }
     @media (max-width: 700px) {
@@ -112,6 +130,10 @@
         <a href="/service-events.html">Обслуживание</a>
         <a href="/users.html">Пользователи</a>
       </nav>
+      <div class="user-panel">
+        <span id="currentUserInfo">Пользователь</span>
+        <button class="logout-btn" id="logoutBtn" type="button">Выйти</button>
+      </div>
     </div>
   </header>
 
@@ -137,12 +159,10 @@
               <option value="DECOMMISSIONED">DECOMMISSIONED</option>
             </select>
           </div>
-
           <div class="field">
             <label for="searchInput">Поиск</label>
             <input id="searchInput" type="text" placeholder="Инвентарный или серийный номер" />
           </div>
-
           <div class="field">
             <label>Действия</label>
             <div class="buttons">
@@ -151,8 +171,11 @@
               <button class="btn btn-primary" id="createBtn">+ Добавить</button>
             </div>
           </div>
+          <div class="field">
+            <label>Подсказка</label>
+            <input id="searchHint" type="text" value="Поиск работает по inventoryNumber и serialNumber" disabled />
+          </div>
         </div>
-
         <div class="summary" id="summaryText">Загрузка данных...</div>
       </div>
 
@@ -188,7 +211,7 @@
         </div>
         <div class="info-card">
           <h3>Для чего нужен поиск</h3>
-          <p>Поиск помогает быстро найти конкретную единицу техники по инвентарному или серийному номеру без просмотра полного списка.</p>
+          <p>Поиск помогает быстро найти конкретную единицу техники по инвентарному или серийному номеру.</p>
         </div>
       </div>
     </div>
@@ -202,12 +225,11 @@
   </footer>
 
   <div id="equipmentModal" class="modal hidden">
-    <div class="modal-overlay" id="equipmentModalOverlay"></div>
-
+    <div class="modal-overlay" id="modalOverlay"></div>
     <div class="modal-content">
       <div class="modal-header">
-        <h2 id="equipmentModalTitle">Добавить оборудование</h2>
-        <button class="modal-close" id="equipmentModalCloseBtn">×</button>
+        <h2 id="modalTitle">Добавить оборудование</h2>
+        <button class="modal-close" id="modalCloseBtn">×</button>
       </div>
 
       <form id="equipmentForm">
@@ -251,42 +273,13 @@
 
         <div class="modal-actions">
           <button type="submit" class="btn btn-primary">Сохранить</button>
-          <button type="button" class="btn btn-secondary" id="equipmentCancelBtn">Отмена</button>
+          <button type="button" class="btn btn-secondary" id="cancelBtn">Отмена</button>
         </div>
       </form>
     </div>
   </div>
 
   <script>
-    function getToken() {
-      return localStorage.getItem('servicems_token');
-    }
-
-    function getCurrentUser() {
-      const user = localStorage.getItem('servicems_user');
-      return user ? JSON.parse(user) : null;
-    }
-
-    function authHeaders() {
-      const token = getToken();
-
-      return {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      };
-    }
-
-    function checkAuth() {
-      const token = getToken();
-
-      if (!token) {
-        window.location.href = '/login.html';
-      }
-    }
-
-    checkAuth();
-
-    
     const tbody = document.querySelector('#equipmentTable tbody');
     const statusFilter = document.getElementById('statusFilter');
     const searchInput = document.getElementById('searchInput');
@@ -297,11 +290,11 @@
     const messageBox = document.getElementById('messageBox');
 
     const modal = document.getElementById('equipmentModal');
-    const modalOverlay = document.getElementById('equipmentModalOverlay');
-    const modalCloseBtn = document.getElementById('equipmentModalCloseBtn');
-    const cancelBtn = document.getElementById('equipmentCancelBtn');
-    const modalTitle = document.getElementById('equipmentModalTitle');
-    const form = document.getElementById('equipmentForm');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const equipmentForm = document.getElementById('equipmentForm');
 
     const inventoryNumberInput = document.getElementById('inventoryNumber');
     const serialNumberInput = document.getElementById('serialNumber');
@@ -310,7 +303,7 @@
     const modelIdInput = document.getElementById('modelId');
     const clientIdInput = document.getElementById('clientId');
 
-    let editingId = null;
+    let editingEquipmentId = null;
 
     function showMessage(text, isError = false) {
       messageBox.style.display = 'block';
@@ -330,7 +323,7 @@
     }
 
     function openModal(mode = 'create', item = null) {
-      editingId = mode === 'edit' && item ? item.id : null;
+      editingEquipmentId = mode === 'edit' && item ? item.id : null;
       modalTitle.textContent = mode === 'edit' ? 'Редактировать оборудование' : 'Добавить оборудование';
 
       inventoryNumberInput.value = item?.inventoryNumber ?? '';
@@ -345,18 +338,14 @@
 
     function closeModal() {
       modal.classList.add('hidden');
-      editingId = null;
-      form.reset();
+      editingEquipmentId = null;
+      equipmentForm.reset();
       statusInput.value = 'AVAILABLE';
     }
 
-    modalOverlay.addEventListener('click', closeModal);
     modalCloseBtn.addEventListener('click', closeModal);
     cancelBtn.addEventListener('click', closeModal);
-
-    createBtn.addEventListener('click', () => {
-      openModal('create');
-    });
+    modalOverlay.addEventListener('click', closeModal);
 
     async function loadEquipment() {
       try {
@@ -412,16 +401,10 @@
 
     async function deleteItem(id) {
       if (!confirm('Удалить оборудование?')) return;
-
       try {
-        const res = await fetch(`/equipment/${id}`, {
-          method: 'DELETE',
-          headers: authHeaders(),
-        });
+        const res = await fetch(`/equipment/${id}`, { method: 'DELETE' });
         const data = await res.json();
-
         if (!res.ok) throw new Error(data.error || 'Ошибка удаления');
-
         showMessage(data.message || 'Оборудование удалено');
         loadEquipment();
       } catch (err) {
@@ -434,14 +417,13 @@
         const res = await fetch(`/equipment/${id}`);
         const item = await res.json();
         if (!res.ok) throw new Error(item.error || 'Не удалось получить запись');
-
         openModal('edit', item);
       } catch (err) {
         showMessage(err.message || 'Ошибка открытия формы редактирования', true);
       }
     }
 
-    form.addEventListener('submit', async (event) => {
+    equipmentForm.addEventListener('submit', async (event) => {
       event.preventDefault();
 
       const payload = {
@@ -456,32 +438,33 @@
       try {
         let response;
 
-        if (editingId) {
-          response = await fetch(`/equipment/${editingId}`, {
+        if (editingEquipmentId) {
+          response = await fetch(`/equipment/${editingEquipmentId}`, {
             method: 'PUT',
-            headers: authHeaders(),
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
           });
         } else {
           response = await fetch('/equipment', {
             method: 'POST',
-            headers: authHeaders(),
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
           });
         }
 
         const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Ошибка сохранения');
 
-        if (!response.ok) {
-          throw new Error(data.error || 'Ошибка сохранения');
-        }
-
-        showMessage(editingId ? 'Оборудование обновлено' : 'Оборудование создано');
+        showMessage(editingEquipmentId ? 'Оборудование обновлено' : 'Оборудование создано');
         closeModal();
         loadEquipment();
       } catch (err) {
         showMessage(err.message || 'Ошибка сохранения', true);
       }
+    });
+
+    createBtn.addEventListener('click', () => {
+      openModal('create');
     });
 
     applyBtn.addEventListener('click', loadEquipment);
