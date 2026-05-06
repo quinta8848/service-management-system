@@ -80,6 +80,14 @@
       background: #1d4ed8;
     }
 
+    .back-link {
+      display: inline-block;
+      margin-top: 16px;
+      color: #2563eb;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
     .message {
       margin-top: 14px;
       padding: 12px 14px;
@@ -99,13 +107,6 @@
       background: #eff6ff;
       color: #1d4ed8;
       border: 1px solid #bfdbfe;
-    }
-
-    .hint {
-      margin-top: 16px;
-      font-size: 13px;
-      color: #64748b;
-      line-height: 1.5;
     }
   </style>
 </head>
@@ -130,10 +131,7 @@
 
     <div id="message" class="message"></div>
 
-    <div class="hint">
-      Для текущих демонстрационных данных пароль может совпадать со значением поля <b>passwordHash</b> в базе.
-      Позже мы переведём это на полноценные хеши и более строгую проверку.
-    </div>
+    <a class="back-link" href="/index.html">← На главную</a>
   </div>
 
   <script>
@@ -144,6 +142,27 @@
       message.className = `message ${type}`;
       message.textContent = text;
     }
+
+    function getCabinetUrl(user) {
+      return user.role === 'CLIENT' ? '/client-portal.html' : '/equipment.html';
+    }
+
+    function redirectIfAlreadyLoggedIn() {
+      const token = localStorage.getItem('servicems_token');
+      const userRaw = localStorage.getItem('servicems_user');
+
+      if (!token || !userRaw) return;
+
+      try {
+        const user = JSON.parse(userRaw);
+        window.location.href = getCabinetUrl(user);
+      } catch {
+        localStorage.removeItem('servicems_token');
+        localStorage.removeItem('servicems_user');
+      }
+    }
+
+    redirectIfAlreadyLoggedIn();
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -170,8 +189,8 @@
         showMessage('Вход выполнен успешно. Перенаправление...', 'success');
 
         setTimeout(() => {
-          window.location.href = '/index.html';
-        }, 700);
+          window.location.href = getCabinetUrl(data.user);
+        }, 500);
       } catch (error) {
         showMessage(error.message || 'Не удалось войти', 'error');
       }

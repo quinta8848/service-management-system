@@ -46,7 +46,8 @@ router.post('/login', async (req, res) => {
         email: user.email,
         name: user.name,
         role: user.role,
-      },
+        clientId: user.clientId,
+       },
       process.env.JWT_SECRET,
       { expiresIn: '8h' }
     );
@@ -58,8 +59,10 @@ router.post('/login', async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        clientId: user.clientId,
       },
     });
+
   } catch (error) {
     console.error('Ошибка логина:', error);
     res.status(500).json({ error: 'Ошибка входа в систему' });
@@ -75,6 +78,8 @@ router.get('/me', authenticateToken, async (req, res) => {
         name: true,
         email: true,
         role: true,
+        clientId: true,
+        client: true,
         createdAt: true,
         updatedAt: true,
       },

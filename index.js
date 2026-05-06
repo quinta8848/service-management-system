@@ -6,6 +6,7 @@ const repairRoutes = require('./routes/repair.routes');
 const serviceRoutes = require('./routes/service.routes');
 const usersRoutes = require('./routes/users.routes');
 const authRoutes = require('./routes/auth.routes');
+const clientPortalRoutes = require('./routes/clientPortal.routes');
 
 const app = express();
 const PORT = 8848;
@@ -23,6 +24,7 @@ app.use('/repair-requests', repairRoutes);
 app.use('/service-events', serviceRoutes);
 app.use('/users', usersRoutes);
 app.use('/auth', authRoutes);
+app.use('/client-portal', clientPortalRoutes);
 
 app.listen(PORT, () => {
   console.log(`Сервер запущен на http://localhost:${PORT}`);

@@ -3,412 +3,324 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ServiceMS</title>
+  <title>ServiceMS | Главная</title>
   <style>
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  color: #1f2937;
-  background: #f5f7fb;
-  line-height: 1.5;
-}
-a { text-decoration: none; color: inherit; }
-button, input, select { font: inherit; }
-.container { width: min(1240px, calc(100% - 40px)); margin: 0 auto; }
+    * { box-sizing: border-box; }
 
-.topbar {
-  background: linear-gradient(90deg, #0f172a, #1e3a8a);
-  color: #fff;
-  width: 100%;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
-}
-.topbar-inner {
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  align-items: stretch;
-  min-height: 72px;
-  width: 100%;
-}
-.logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  font-weight: 700;
-  color: #fff;
-  height: 100%;
-  letter-spacing: 0.2px;
-}
-.logo span { color: #60a5fa; }
-.nav {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  height: 100%;
-}
-.nav a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #e5e7eb;
-  font-size: 15px;
-  transition: 0.2s ease;
-  position: relative;
-  min-height: 72px;
-  padding: 0 10px;
-  text-align: center;
-}
-.nav a:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: #60a5fa;
-}
-.nav a.active { color: #60a5fa; }
-.nav a.active::after {
-  content: "";
-  position: absolute;
-  bottom: 10px;
-  width: 42%;
-  height: 2px;
-  background: #60a5fa;
-  border-radius: 2px;
-}
+    :root {
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --text: #1f2937;
+      --muted: #64748b;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --border: #e5e7eb;
+      --nav: #0f172a;
+      --nav2: #1e3a8a;
+      --shadow: 0 12px 30px rgba(15,23,42,0.06);
+    }
 
-.hero {
-  background: linear-gradient(135deg, #0f172a, #1e3a8a);
-  color: #fff;
-  padding: 56px 0 58px;
-}
-.hero h1 {
-  margin: 0 0 14px;
-  font-size: clamp(30px, 4vw, 48px);
-  line-height: 1.12;
-}
-.hero p {
-  margin: 0;
-  max-width: 880px;
-  color: #dbeafe;
-  font-size: 17px;
-  line-height: 1.7;
-}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
 
-.section { padding: 34px 0 60px; }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
 
-.controls {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 20px;
-  padding: 22px;
-  box-shadow: 0 12px 30px rgba(15,23,42,0.06);
-  margin-top: -32px;
-  position: relative;
-  z-index: 2;
-}
-.controls-grid {
-  display: grid;
-  gap: 16px;
-  align-items: end;
-}
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.field label {
-  font-size: 14px;
-  font-weight: 700;
-  color: #374151;
-}
-.field input, .field select {
-  width: 100%;
-  padding: 11px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 12px;
-  font-size: 14px;
-  background: #fff;
-  color: #111827;
-  outline: none;
-  transition: 0.2s ease;
-}
-.field input:focus, .field select:focus {
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 3px rgba(96,165,250,0.18);
-}
-.buttons { display: flex; gap: 10px; flex-wrap: wrap; }
-.btn {
-  padding: 11px 16px;
-  border: none;
-  border-radius: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.2s ease;
-  font-size: 14px;
-}
-.btn-primary { background: #2563eb; color: #fff; }
-.btn-primary:hover { background: #1d4ed8; }
-.btn-secondary { background: #e5e7eb; color: #111827; }
-.btn-secondary:hover { background: #d1d5db; }
+    .container {
+      width: min(1200px, calc(100% - 40px));
+      margin: 0 auto;
+    }
 
-.summary {
-  margin-top: 18px;
-  color: #64748b;
-  font-size: 15px;
-}
-.message {
-  margin-top: 18px;
-  padding: 14px 16px;
-  border-radius: 12px;
-  background: #eff6ff;
-  color: #1d4ed8;
-  border: 1px solid #bfdbfe;
-  display: none;
-}
+    .topbar {
+      background: linear-gradient(90deg, var(--nav), var(--nav2));
+      color: #fff;
+      width: 100%;
+    }
 
-.stats {
-  margin-top: 24px;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 18px;
-}
-.stat-card {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 18px;
-  padding: 20px 22px;
-  box-shadow: 0 10px 28px rgba(15,23,42,0.05);
-}
-.stat-label {
-  color: #64748b;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 8px;
-}
-.stat-value {
-  color: #0f172a;
-  font-size: 28px;
-  font-weight: 800;
-  line-height: 1;
-}
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 72px;
+      gap: 24px;
+    }
 
-.table-wrap {
-  margin-top: 24px;
-  background: #fff;
-  border-radius: 20px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 12px 30px rgba(15,23,42,0.06);
-  overflow: hidden;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-th, td {
-  padding: 14px 16px;
-  border-bottom: 1px solid #e5e7eb;
-  text-align: left;
-  vertical-align: top;
-  font-size: 14px;
-}
-th {
-  background: #f8fafc;
-  color: #111827;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-tbody tr:hover { background: #f8fbff; }
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+    }
 
-.badge {
-  display: inline-block;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #fff;
-  white-space: nowrap;
-}
-.actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.action-btn {
-  border: none;
-  border-radius: 9px;
-  padding: 8px 10px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 13px;
-}
-.action-edit { background: #dbeafe; color: #1d4ed8; }
-.action-delete { background: #fee2e2; color: #b91c1c; }
+    .logo span {
+      color: #60a5fa;
+    }
 
-.info-section {
-  margin-top: 36px;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-}
-.info-card {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 18px;
-  padding: 22px;
-  box-shadow: 0 10px 28px rgba(15,23,42,0.05);
-}
-.info-card h3 {
-  margin: 0 0 12px;
-  font-size: 20px;
-  color: #111827;
-}
-.info-card p {
-  margin: 0;
-  color: #6b7280;
-  line-height: 1.6;
-}
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-.footer {
-  background: #0f172a;
-  color: #cbd5e1;
-  padding: 26px 0;
-  margin-top: 40px;
-}
-.footer-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-.footer small { color: #94a3b8; }
+    .user-info {
+      color: #dbeafe;
+      font-size: 14px;
+      display: none;
+    }
 
-@media (max-width: 1100px) {
-  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .info-section { grid-template-columns: 1fr; }
-  .topbar-inner { grid-template-columns: 1fr; min-height: auto; }
-  .logo { justify-content: flex-start; padding: 14px 0 8px; }
-  .nav { grid-template-columns: repeat(5, 1fr); }
-}
-@media (max-width: 700px) {
-  .controls { padding: 18px; }
-  .stats { grid-template-columns: 1fr; }
-  .nav { grid-template-columns: 1fr 1fr; }
-  .nav a { justify-content: flex-start; padding-left: 16px; min-height: 56px; }
-  .table-wrap { overflow-x: auto; }
-}
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 15px;
+    }
 
-  .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 36px; align-items: center; }
-  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 18px; }
-  .btn { display: inline-block; padding: 14px 22px; border-radius: 12px; font-weight: 700; transition: 0.2s; }
-  .btn-primary { background: #2563eb; color: #fff; }
-  .btn-primary:hover { background: #1d4ed8; }
-  .btn-secondary { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.18); }
-  .btn-secondary:hover { background: rgba(255,255,255,0.2); }
-  .hero-panel { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 26px; backdrop-filter: blur(6px); }
-  .hero-panel h3 { margin-top: 0; margin-bottom: 18px; font-size: 20px; }
-  .hero-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
-  .hero-list li { padding: 12px 14px; border-radius: 10px; background: rgba(255,255,255,0.08); color: #e5e7eb; font-size: 15px; }
-  .section { padding: 70px 0; }
-  .section-title { margin: 0 0 14px; font-size: 34px; color: #0f172a; }
-  .section-subtitle { margin: 0 0 32px; color: #64748b; max-width: 760px; line-height: 1.6; font-size: 17px; }
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 22px; }
-  .card { background: #fff; border-radius: 18px; padding: 24px; box-shadow: 0 12px 35px rgba(15,23,42,0.08); border: 1px solid #e5e7eb; display: flex; flex-direction: column; min-height: 220px; }
-  .card-icon { width: 52px; height: 52px; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; background: #dbeafe; color: #1d4ed8; font-size: 24px; margin-bottom: 18px; }
-  .card h3 { margin: 0 0 12px; font-size: 21px; color: #111827; }
-  .card p { margin: 0 0 18px; color: #6b7280; line-height: 1.55; flex-grow: 1; }
-  .card a { color: #2563eb; font-weight: 700; }
-  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-  .feature { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 22px; box-shadow: 0 10px 28px rgba(15,23,42,0.05); }
-  .feature h4 { margin: 0 0 10px; font-size: 20px; }
-  .feature p { margin: 0; color: #6b7280; line-height: 1.6; }
-  .cta { background: linear-gradient(135deg, #1d4ed8, #0f172a); color: #fff; border-radius: 24px; padding: 36px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
-  .cta h3 { margin: 0 0 10px; font-size: 30px; }
-  .cta p { margin: 0; color: #dbeafe; max-width: 720px; line-height: 1.6; }
-  .footer { background: #0f172a; color: #cbd5e1; padding: 26px 0; margin-top: 30px; }
-  .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
-  .footer small { color: #94a3b8; }
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-outline {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.22);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.16);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--nav), var(--nav2));
+      color: #fff;
+      padding: 80px 0 96px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      margin: 0 0 18px;
+      font-size: clamp(36px, 5vw, 58px);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      margin: 0 0 26px;
+      color: #dbeafe;
+      line-height: 1.7;
+      font-size: 18px;
+      max-width: 780px;
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.22);
+    }
+
+    .hero-card h2 {
+      margin: 0 0 14px;
+      font-size: 24px;
+    }
+
+    .hero-card ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #dbeafe;
+      line-height: 1.8;
+    }
+
+    .section {
+      padding: 54px 0;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+      color: #0f172a;
+      font-size: 22px;
+    }
+
+    .card p {
+      margin: 0;
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    .footer {
+      background: var(--nav);
+      color: #cbd5e1;
+      padding: 26px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer small {
+      color: #94a3b8;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px 0;
+      }
+    }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <div class="topbar-inner">
-      <a href="/index.html" class="logo">Service<span>MS</span></a>
-      <nav class="nav">
-        <a href="/equipment.html">Оборудование</a>
-        <a href="/clients.html">Клиенты</a>
-        <a href="/repair-requests.html">Заявки</a>
-        <a href="/service-events.html">Обслуживание</a>
-        <a href="/users.html">Пользователи</a>
-      </nav>
+    <div class="container topbar-inner">
+      <a class="logo" href="/index.html">Service<span>MS</span></a>
+
+      <div class="top-actions">
+        <span class="user-info" id="userInfo"></span>
+        <button class="btn btn-outline" id="cabinetBtn" type="button">Войти</button>
+      </div>
     </div>
   </header>
-  <section class="hero">
-    <div class="container hero-grid">
-      <div class="hero-text">
-        <h1>Веб-система учета и обслуживания роботизированного оборудования</h1>
-        <p>Единая информационная система для хранения данных по оборудованию, клиентам, ремонтным заявкам, сервисным событиям и пользователям. Проект ориентирован на управление жизненным циклом промышленной робототехники.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="/equipment.html">Перейти к оборудованию</a>
-          <a class="btn btn-secondary" href="/repair-requests.html">Открыть заявки на ремонт</a>
-        </div>
-      </div>
-      <div class="hero-panel">
-        <h3>Что уже поддерживает система</h3>
-        <ul class="hero-list">
-          <li>Учет единиц оборудования и их текущего состояния</li>
-          <li>Ведение клиентской базы и привязка оборудования к клиенту</li>
-          <li>Регистрация и сопровождение заявок на ремонт</li>
-          <li>Планирование и контроль сервисного обслуживания</li>
-          <li>Работа с пользователями и ролями сотрудников</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">Основные разделы системы</h2>
-      <p class="section-subtitle">Каждый модуль отвечает за отдельную часть жизненного цикла оборудования: от постановки на учет до сервисного сопровождения и работы с заявками.</p>
-      <div class="cards">
-        <div class="card"><div class="card-icon">🤖</div><h3>Оборудование</h3><p>Каталог единиц оборудования с моделями, статусами, местоположением и связью с клиентами.</p><a href="/equipment.html">Открыть раздел →</a></div>
-        <div class="card"><div class="card-icon">🏢</div><h3>Клиенты</h3><p>Хранение данных о заказчиках, контактных лицах и связанном оборудовании.</p><a href="/clients.html">Открыть раздел →</a></div>
-        <div class="card"><div class="card-icon">🛠️</div><h3>Заявки на ремонт</h3><p>Фиксация неисправностей, назначение инженеров и контроль статусов заявок.</p><a href="/repair-requests.html">Открыть раздел →</a></div>
-        <div class="card"><div class="card-icon">📅</div><h3>Обслуживание</h3><p>Плановые и выполненные сервисные события: диагностика, ТО и ремонтные работы.</p><a href="/service-events.html">Открыть раздел →</a></div>
-        <div class="card"><div class="card-icon">👥</div><h3>Пользователи</h3><p>Сотрудники системы, роли, инженеры и связи с ремонтами и сервисными работами.</p><a href="/users.html">Открыть раздел →</a></div>
-      </div>
-    </div>
-  </section>
-  <section class="section" style="padding-top: 0;">
-    <div class="container">
-      <h2 class="section-title">Функциональные возможности</h2>
-      <p class="section-subtitle">Ниже представлены ключевые возможности, которые формируют основу информационной системы сервисного управления.</p>
-      <div class="features">
-        <div class="feature"><h4>Централизованный учет</h4><p>Система хранит сведения по каждой единице оборудования, включая модель, статус, серийный номер и клиента.</p></div>
-        <div class="feature"><h4>Контроль заявок</h4><p>Позволяет фиксировать обращения по ремонту, отслеживать их статус и назначать ответственных инженеров.</p></div>
-        <div class="feature"><h4>История обслуживания</h4><p>Для оборудования можно учитывать плановые и фактические сервисные события, а также результаты работ.</p></div>
-        <div class="feature"><h4>Роли пользователей</h4><p>Поддерживается работа с различными ролями: администраторы, менеджеры, инженеры и клиенты.</p></div>
-      </div>
-    </div>
-  </section>
-  <section class="section" style="padding-top: 0;">
-    <div class="container">
-      <div class="cta">
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
         <div>
-          <h3>Готово к дальнейшему развитию</h3>
-          <p>На текущем этапе система уже имеет рабочий backend и базовый frontend. Далее можно расширять интерфейс, добавлять формы, авторизацию, отчеты и статистические панели.</p>
+          <h1>Система управления сервисом роботизированного оборудования</h1>
+          <p>
+            ServiceMS помогает вести каталог оборудования, клиентов, ремонтных заявок,
+            сервисных событий и разграничивать доступ между сотрудниками и клиентами.
+          </p>
+          <button class="btn btn-primary" id="mainLoginBtn" type="button">Войти в систему</button>
         </div>
-        <a class="btn btn-primary" href="/equipment.html">Начать с каталога оборудования</a>
+
+        <div class="hero-card">
+          <h2>Основные возможности</h2>
+          <ul>
+            <li>учёт оборудования и его статусов;</li>
+            <li>работа с клиентами и заявками;</li>
+            <li>планирование сервисного обслуживания;</li>
+            <li>личный кабинет клиента;</li>
+            <li>доступ по ролям.</li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section class="section">
+      <div class="container cards">
+        <div class="card">
+          <h3>Для сотрудников</h3>
+          <p>Администраторы, менеджеры и инженеры получают доступ к внутреннему рабочему кабинету с разделами оборудования, клиентов, заявок и обслуживания.</p>
+        </div>
+
+        <div class="card">
+          <h3>Для клиентов</h3>
+          <p>Клиент видит только своё оборудование, свои заявки и историю обслуживания, не получая доступа к данным других организаций.</p>
+        </div>
+
+        <div class="card">
+          <h3>Для дипломного проекта</h3>
+          <p>Проект демонстрирует backend API, frontend-интерфейс, авторизацию, роли и связь между пользователями и клиентскими организациями.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
   <footer class="footer">
     <div class="container footer-inner">
-      <div><strong>ServiceMS</strong><br /><small>Дипломный проект по разработке веб-системы учета и обслуживания роботизированного оборудования</small></div>
+      <div><strong>ServiceMS</strong><br /><small>Web-based Service Management System</small></div>
       <small>© 2026 Service Management System</small>
     </div>
   </footer>
+
+  <script>
+    function getToken() {
+      return localStorage.getItem('servicems_token');
+    }
+
+    function getCurrentUser() {
+      const user = localStorage.getItem('servicems_user');
+      return user ? JSON.parse(user) : null;
+    }
+
+    function getCabinetUrl(user) {
+      if (!user) return '/login.html';
+      return user.role === 'CLIENT' ? '/client-portal.html' : '/equipment.html';
+    }
+
+    function goToAuthTarget() {
+      const user = getCurrentUser();
+      const token = getToken();
+
+      if (!token || !user) {
+        window.location.href = '/login.html';
+        return;
+      }
+
+      window.location.href = getCabinetUrl(user);
+    }
+
+    const cabinetBtn = document.getElementById('cabinetBtn');
+    const mainLoginBtn = document.getElementById('mainLoginBtn');
+    const userInfo = document.getElementById('userInfo');
+
+    const token = getToken();
+    const user = getCurrentUser();
+
+    if (token && user) {
+      cabinetBtn.textContent = 'Перейти в кабинет';
+      mainLoginBtn.textContent = 'Перейти в кабинет';
+      userInfo.style.display = 'inline';
+      userInfo.textContent = `${user.name || user.email} / ${user.role}`;
+    }
+
+    cabinetBtn.addEventListener('click', goToAuthTarget);
+    mainLoginBtn.addEventListener('click', goToAuthTarget);
+  </script>
 </body>
 </html>

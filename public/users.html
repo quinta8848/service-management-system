@@ -535,7 +535,7 @@
 <body>
   <header class="topbar">
     <div class="topbar-inner">
-      <a href="/index.html" class="logo">Service<span>MS</span></a>
+      <a href="/equipment.html" class="logo">Service<span>MS</span></a>
       <nav class="nav">
         <a href="/equipment.html">Оборудование</a>
         <a href="/clients.html">Клиенты</a>
@@ -685,9 +685,15 @@
 
     function checkAuth() {
       const token = getToken();
+      const user = getCurrentUser();
 
       if (!token) {
         window.location.href = '/login.html';
+        return;
+      }
+
+      if (user && user.role === 'CLIENT') {
+        window.location.href = '/client-portal.html';
       }
     }
 

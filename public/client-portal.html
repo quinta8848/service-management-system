@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Личный кабинет клиента | ServiceMS</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root { --bg:#f5f7fb; --surface:#fff; --text:#1f2937; --muted:#64748b; --primary:#2563eb; --primary-dark:#1d4ed8; --border:#e5e7eb; --nav:#0f172a; --nav2:#1e3a8a; --shadow:0 12px 30px rgba(15,23,42,.06); }
+    body { margin:0; font-family:Arial,sans-serif; color:var(--text); background:var(--bg); }
+    a { text-decoration:none; color:inherit; }
+    .container { width:min(1200px, calc(100% - 40px)); margin:0 auto; }
+    .topbar { background:linear-gradient(90deg,var(--nav),var(--nav2)); color:#fff; width:100%; }
+    .topbar-inner { display:grid; grid-template-columns:200px 1fr 300px; align-items:center; height:70px; width:100%; }
+    .logo { display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; color:#fff; height:100%; }
+    .logo span { color:#60a5fa; }
+    .nav { display:grid; grid-template-columns:repeat(3,1fr); height:100%; }
+    .nav button { display:flex; align-items:center; justify-content:center; color:#e5e7eb; font-size:15px; transition:.2s; position:relative; height:100%; padding:0 10px; text-align:center; background:transparent; border:none; cursor:pointer; font-family:inherit; }
+    .nav button:hover { background:rgba(255,255,255,.05); color:#60a5fa; }
+    .nav button.active { color:#60a5fa; }
+    .nav button.active::after { content:""; position:absolute; bottom:10px; width:40%; height:2px; background:#60a5fa; border-radius:2px; }
+    .user-panel { display:flex; align-items:center; justify-content:center; gap:12px; height:100%; padding:0 16px; color:#e5e7eb; border-left:1px solid rgba(255,255,255,.12); font-size:14px; white-space:nowrap; }
+    .logout-btn { border:1px solid rgba(255,255,255,.22); background:rgba(255,255,255,.08); color:#fff; border-radius:10px; padding:8px 12px; font-weight:700; cursor:pointer; transition:.2s; }
+    .logout-btn:hover { background:rgba(255,255,255,.16); color:#60a5fa; }
+    .hero { background:linear-gradient(135deg,var(--nav),var(--nav2)); color:#fff; padding:56px 0; }
+    .hero h1 { margin:0 0 14px; font-size:clamp(30px,4vw,46px); }
+    .hero p { margin:0; max-width:920px; color:#dbeafe; line-height:1.6; font-size:17px; }
+    .section { padding:36px 0 60px; }
+    .stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; margin-top:-30px; position:relative; z-index:2; }
+    .stat-card { background:#fff; border:1px solid var(--border); border-radius:18px; padding:20px; box-shadow:var(--shadow); }
+    .stat-card span { display:block; margin-bottom:10px; color:var(--muted); font-size:13px; text-transform:uppercase; letter-spacing:.04em; }
+    .stat-card strong { display:block; font-size:30px; color:#0f172a; }
+    .tab-page { display:none; margin-top:24px; }
+    .tab-page.active { display:block; }
+    .panel { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:20px; box-shadow:var(--shadow); }
+    .panel-header { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:18px; }
+    .panel-header h2 { margin:0 0 8px; font-size:24px; color:#0f172a; }
+    .panel-header p { margin:0; color:#64748b; line-height:1.5; max-width:760px; }
+    .btn { padding:11px 16px; border:none; border-radius:10px; font-weight:700; cursor:pointer; transition:.2s; font-size:14px; }
+    .btn-primary { background:var(--primary); color:#fff; }
+    .btn-primary:hover { background:var(--primary-dark); }
+    .btn-secondary { background:#e5e7eb; color:#111827; }
+    .btn-secondary:hover { background:#d1d5db; }
+    .table-wrap { background:#fff; border-radius:14px; border:1px solid var(--border); overflow:hidden; }
+    table { width:100%; border-collapse:collapse; }
+    th,td { padding:14px 16px; border-bottom:1px solid var(--border); text-align:left; vertical-align:top; font-size:14px; }
+    th { background:#f8fafc; color:#111827; font-size:13px; text-transform:uppercase; letter-spacing:.04em; }
+    tbody tr:hover { background:#f8fbff; }
+    .status-badge,.priority-badge,.type-badge { display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; color:#fff; white-space:nowrap; }
+    .status-AVAILABLE,.status-COMPLETED,.status-DONE { background:#16a34a; }
+    .status-RENTED,.status-NEW,.status-PLANNED { background:#2563eb; }
+    .status-IN_SERVICE,.status-IN_PROGRESS { background:#d97706; }
+    .status-BROKEN,.status-OVERDUE { background:#dc2626; }
+    .status-DECOMMISSIONED,.status-CANCELED { background:#6b7280; }
+    .priority-LOW { background:#16a34a; } .priority-MEDIUM { background:#2563eb; } .priority-HIGH { background:#d97706; } .priority-CRITICAL { background:#dc2626; }
+    .type-INSPECTION { background:#475569; } .type-MAINTENANCE { background:#2563eb; } .type-DIAGNOSTICS { background:#7c3aed; } .type-REPAIR { background:#d97706; }
+    .message { margin-top:20px; padding:14px 16px; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; display:none; }
+    .footer { background:var(--nav); color:#cbd5e1; padding:26px 0; margin-top:40px; }
+    .footer-inner { display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap; }
+    .footer small { color:#94a3b8; }
+    .modal.hidden { display:none; }
+    .modal { position:fixed; inset:0; z-index:999; display:flex; align-items:center; justify-content:center; padding:20px; }
+    .modal-overlay { position:absolute; inset:0; background:rgba(15,23,42,.65); }
+    .modal-content { position:relative; z-index:1; width:min(760px,100%); background:#fff; border-radius:20px; box-shadow:0 24px 60px rgba(0,0,0,.25); padding:24px; max-height:90vh; overflow:auto; }
+    .modal-header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:20px; }
+    .modal-header h2 { margin:0; font-size:24px; color:#0f172a; }
+    .modal-close { border:none; background:#e5e7eb; color:#111827; width:40px; height:40px; border-radius:10px; font-size:24px; cursor:pointer; line-height:1; }
+    .modal-close:hover { background:#d1d5db; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .form-field { display:flex; flex-direction:column; gap:8px; }
+    .form-field.full { grid-column:1 / -1; }
+    .form-field label { font-size:14px; font-weight:700; color:#374151; }
+    .form-field input,.form-field select,.form-field textarea { width:100%; padding:12px 13px; border:1px solid #d1d5db; border-radius:12px; font-size:14px; background:#fff; font-family:inherit; }
+    .form-field textarea { min-height:120px; resize:vertical; }
+    .modal-actions { display:flex; justify-content:flex-end; gap:12px; margin-top:22px; }
+    @media (max-width:1100px) { .topbar-inner{grid-template-columns:1fr; height:auto;} .logo{justify-content:flex-start; padding:14px 0 8px;} .nav{grid-template-columns:1fr 1fr 1fr; min-height:56px;} .user-panel{justify-content:flex-start; padding:12px 16px; border-left:none; border-top:1px solid rgba(255,255,255,.10);} .stats{grid-template-columns:repeat(2,1fr);} }
+    @media (max-width:700px) { .container{width:min(100% - 24px,1200px);} .nav{grid-template-columns:1fr;} .nav button{justify-content:flex-start; padding:12px 16px;} .stats{grid-template-columns:1fr;} .panel-header{flex-direction:column;} .table-wrap{overflow-x:auto;} table{min-width:900px;} .form-grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="/client-portal.html" class="logo">Service<span>MS</span></a>
+      <nav class="nav">
+        <button type="button" class="tab-btn active" data-tab="equipment">Моё оборудование</button>
+        <button type="button" class="tab-btn" data-tab="requests">Мои заявки</button>
+        <button type="button" class="tab-btn" data-tab="service">История обслуживания</button>
+      </nav>
+      <div class="user-panel">
+        <span id="currentUserInfo">Пользователь</span>
+        <button class="logout-btn" id="logoutBtn" type="button">Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1 id="pageTitle">Моё оборудование</h1>
+      <p id="pageDescription">Оборудование, закреплённое за вашей организацией. По нему можно создать заявку на ремонт.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="stats">
+        <div class="stat-card"><span>Моё оборудование</span><strong id="equipmentCount">0</strong></div>
+        <div class="stat-card"><span>Активные заявки</span><strong id="activeRequestsCount">0</strong></div>
+        <div class="stat-card"><span>Сервисные события</span><strong id="serviceEventsCount">0</strong></div>
+        <div class="stat-card"><span>Завершённые ремонты</span><strong id="completedRequestsCount">0</strong></div>
+      </div>
+
+      <div class="message" id="messageBox"></div>
+
+      <div class="tab-page active" id="tab-equipment">
+        <div class="panel" id="equipment">
+        <div class="panel-header">
+          <div>
+            <h2>Моё оборудование</h2>
+            <p>Оборудование, закреплённое за вашей организацией. По нему можно создать заявку на ремонт.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="equipmentTable">
+            <thead><tr><th>ID</th><th>Инвентарный номер</th><th>Серийный номер</th><th>Модель</th><th>Производитель</th><th>Статус</th><th>Локация</th><th>Действие</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      </div>
+
+      <div class="tab-page" id="tab-requests">
+        <div class="panel" id="requests">
+        <div class="panel-header">
+          <div>
+            <h2>Мои заявки</h2>
+            <p>Заявки на ремонт и диагностику, созданные вашей организацией.</p>
+          </div>
+          <button class="btn btn-primary" id="createRequestBtn" type="button">+ Создать заявку</button>
+        </div>
+        <div class="table-wrap">
+          <table id="requestsTable">
+            <thead><tr><th>ID</th><th>Заголовок</th><th>Описание</th><th>Оборудование</th><th>Статус</th><th>Приоритет</th><th>Инженер</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      </div>
+
+      <div class="tab-page" id="tab-service">
+        <div class="panel" id="service">
+        <div class="panel-header">
+          <div>
+            <h2>История обслуживания</h2>
+            <p>Сервисные события по оборудованию вашей организации: диагностика, ремонт, техническое обслуживание и инспекции.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="serviceTable">
+            <thead><tr><th>ID</th><th>Тип</th><th>Статус</th><th>Дата</th><th>Описание работ</th><th>Результат</th><th>Оборудование</th><th>Инженер</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container footer-inner"><div><strong>ServiceMS</strong><br><small>Личный кабинет клиента сервисной системы</small></div><small>© 2026 Service Management System</small></div></footer>
+
+  <div id="requestModal" class="modal hidden">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-content">
+      <div class="modal-header"><h2>Создать заявку на ремонт</h2><button class="modal-close" id="modalCloseBtn">×</button></div>
+      <form id="requestForm">
+        <div class="form-grid">
+          <div class="form-field full"><label for="equipmentId">Оборудование</label><select id="equipmentId" name="equipmentId"></select></div>
+          <div class="form-field full"><label for="title">Заголовок заявки</label><input type="text" id="title" name="title" placeholder="Например: Ошибка привода оси Y"></div>
+          <div class="form-field full"><label for="description">Описание проблемы</label><textarea id="description" name="description" placeholder="Опишите, что произошло с оборудованием"></textarea></div>
+          <div class="form-field"><label for="priority">Приоритет</label><select id="priority" name="priority"><option value="LOW">LOW</option><option value="MEDIUM" selected>MEDIUM</option><option value="HIGH">HIGH</option><option value="CRITICAL">CRITICAL</option></select></div>
+        </div>
+        <div class="modal-actions"><button type="submit" class="btn btn-primary">Отправить заявку</button><button type="button" class="btn btn-secondary" id="cancelBtn">Отмена</button></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const equipmentTableBody = document.querySelector('#equipmentTable tbody');
+    const requestsTableBody = document.querySelector('#requestsTable tbody');
+    const serviceTableBody = document.querySelector('#serviceTable tbody');
+    const equipmentCount = document.getElementById('equipmentCount');
+    const activeRequestsCount = document.getElementById('activeRequestsCount');
+    const serviceEventsCount = document.getElementById('serviceEventsCount');
+    const completedRequestsCount = document.getElementById('completedRequestsCount');
+    const messageBox = document.getElementById('messageBox');
+    const createRequestBtn = document.getElementById('createRequestBtn');
+    const requestModal = document.getElementById('requestModal');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const requestForm = document.getElementById('requestForm');
+    const equipmentIdInput = document.getElementById('equipmentId');
+    const titleInput = document.getElementById('title');
+    const descriptionInput = document.getElementById('description');
+    const priorityInput = document.getElementById('priority');
+
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPages = document.querySelectorAll('.tab-page');
+    const pageTitle = document.getElementById('pageTitle');
+    const pageDescription = document.getElementById('pageDescription');
+
+    const tabTexts = {
+      equipment: {
+        title: 'Моё оборудование',
+        description: 'Оборудование, закреплённое за вашей организацией. По нему можно создать заявку на ремонт.',
+      },
+      requests: {
+        title: 'Мои заявки',
+        description: 'Заявки на ремонт и диагностику, созданные вашей организацией.',
+      },
+      service: {
+        title: 'История обслуживания',
+        description: 'Сервисные события по оборудованию вашей организации: диагностика, ремонт, техническое обслуживание и инспекции.',
+      },
+    };
+    let equipmentData = [];
+    let repairRequestsData = [];
+    let serviceEventsData = [];
+
+    function getToken() { return localStorage.getItem('servicems_token'); }
+    function getCurrentUser() { const user = localStorage.getItem('servicems_user'); return user ? JSON.parse(user) : null; }
+    function authHeaders() { return { 'Content-Type':'application/json', 'Authorization':`Bearer ${getToken()}` }; }
+    function checkAuth() { const token = getToken(); const user = getCurrentUser(); if (!token) { window.location.href='/login.html'; return; } if (!user || user.role !== 'CLIENT') { window.location.href='/index.html'; } }
+    function renderAuthUser() { const user = getCurrentUser(); const currentUserInfo = document.getElementById('currentUserInfo'); const logoutBtn = document.getElementById('logoutBtn'); if (currentUserInfo && user) currentUserInfo.textContent = `${user.name || user.email || 'Пользователь'} / ${user.role}`; if (logoutBtn) logoutBtn.addEventListener('click', () => { localStorage.removeItem('servicems_token'); localStorage.removeItem('servicems_user'); window.location.href='/login.html'; }); }
+
+    function switchTab(tabName) {
+      tabButtons.forEach(button => {
+        button.classList.toggle('active', button.dataset.tab === tabName);
+      });
+
+      tabPages.forEach(page => {
+        page.classList.toggle('active', page.id === `tab-${tabName}`);
+      });
+
+      pageTitle.textContent = tabTexts[tabName].title;
+      pageDescription.textContent = tabTexts[tabName].description;
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showMessage(text, isError=false) { messageBox.style.display='block'; messageBox.textContent=text; messageBox.style.background=isError?'#fef2f2':'#eff6ff'; messageBox.style.color=isError?'#b91c1c':'#1d4ed8'; messageBox.style.borderColor=isError?'#fecaca':'#bfdbfe'; }
+    function clearMessage() { messageBox.style.display='none'; messageBox.textContent=''; }
+    function createStatusBadge(status) { return `<span class="status-badge status-${status}">${status}</span>`; }
+    function createPriorityBadge(priority) { return `<span class="priority-badge priority-${priority}">${priority}</span>`; }
+    function createTypeBadge(type) { return `<span class="type-badge type-${type}">${type}</span>`; }
+    function formatDate(value) { if (!value) return '—'; const date = new Date(value); return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString('ru-RU'); }
+
+    function openModal(selectedEquipmentId=null) { fillEquipmentSelect(); if (selectedEquipmentId) equipmentIdInput.value=String(selectedEquipmentId); requestModal.classList.remove('hidden'); }
+    function closeModal() { requestModal.classList.add('hidden'); requestForm.reset(); priorityInput.value='MEDIUM'; }
+    function fillEquipmentSelect() { equipmentIdInput.innerHTML=''; if (!equipmentData.length) { const option=document.createElement('option'); option.value=''; option.textContent='Нет доступного оборудования'; equipmentIdInput.appendChild(option); return; } equipmentData.forEach(item => { const option=document.createElement('option'); option.value=item.id; option.textContent=`${item.inventoryNumber} — ${item.model?.name ?? 'Модель не указана'} (${item.serialNumber ?? 'без серийного номера'})`; equipmentIdInput.appendChild(option); }); }
+    function renderStats() { const active = repairRequestsData.filter(i => i.status !== 'COMPLETED' && i.status !== 'CANCELED'); const completed = repairRequestsData.filter(i => i.status === 'COMPLETED'); equipmentCount.textContent=equipmentData.length; activeRequestsCount.textContent=active.length; serviceEventsCount.textContent=serviceEventsData.length; completedRequestsCount.textContent=completed.length; }
+    function renderEquipment() { equipmentTableBody.innerHTML=''; if (!equipmentData.length) { equipmentTableBody.innerHTML='<tr><td colspan="8">Оборудование не найдено.</td></tr>'; return; } equipmentData.forEach(item => { const tr=document.createElement('tr'); tr.innerHTML=`<td>${item.id ?? ''}</td><td>${item.inventoryNumber ?? '—'}</td><td>${item.serialNumber ?? '—'}</td><td>${item.model?.name ?? '—'}</td><td>${item.model?.manufacturer ?? '—'}</td><td>${createStatusBadge(item.status ?? '')}</td><td>${item.location ?? '—'}</td><td><button class="btn btn-primary" type="button" onclick="openModal(${item.id})">Создать заявку</button></td>`; equipmentTableBody.appendChild(tr); }); }
+    function renderRepairRequests() { requestsTableBody.innerHTML=''; if (!repairRequestsData.length) { requestsTableBody.innerHTML='<tr><td colspan="7">Заявки не найдены.</td></tr>'; return; } repairRequestsData.forEach(item => { const tr=document.createElement('tr'); tr.innerHTML=`<td>${item.id ?? ''}</td><td>${item.title ?? '—'}</td><td>${item.description ?? '—'}</td><td>${item.equipment?.inventoryNumber ?? '—'}</td><td>${createStatusBadge(item.status ?? '')}</td><td>${createPriorityBadge(item.priority ?? '')}</td><td>${item.assignedEngineer?.name ?? 'Пока не назначен'}</td>`; requestsTableBody.appendChild(tr); }); }
+    function renderServiceEvents() { serviceTableBody.innerHTML=''; if (!serviceEventsData.length) { serviceTableBody.innerHTML='<tr><td colspan="8">История обслуживания не найдена.</td></tr>'; return; } serviceEventsData.forEach(item => { const tr=document.createElement('tr'); tr.innerHTML=`<td>${item.id ?? ''}</td><td>${createTypeBadge(item.type ?? '')}</td><td>${createStatusBadge(item.status ?? '')}</td><td>${formatDate(item.completedDate || item.plannedDate)}</td><td>${item.workDescription ?? '—'}</td><td>${item.result ?? '—'}</td><td>${item.equipment?.inventoryNumber ?? '—'}</td><td>${item.engineer?.name ?? '—'}</td>`; serviceTableBody.appendChild(tr); }); }
+
+    async function loadClientPortalData() {
+      try {
+        clearMessage();
+        const [equipmentResponse, requestsResponse, serviceResponse] = await Promise.all([
+          fetch('/client-portal/equipment', { headers: authHeaders() }),
+          fetch('/client-portal/repair-requests', { headers: authHeaders() }),
+          fetch('/client-portal/service-events', { headers: authHeaders() })
+        ]);
+        const equipment = await equipmentResponse.json();
+        const requests = await requestsResponse.json();
+        const serviceEvents = await serviceResponse.json();
+        if (!equipmentResponse.ok) throw new Error(equipment.error || 'Ошибка загрузки оборудования');
+        if (!requestsResponse.ok) throw new Error(requests.error || 'Ошибка загрузки заявок');
+        if (!serviceResponse.ok) throw new Error(serviceEvents.error || 'Ошибка загрузки истории обслуживания');
+        equipmentData = equipment; repairRequestsData = requests; serviceEventsData = serviceEvents;
+        renderStats(); renderEquipment(); renderRepairRequests(); renderServiceEvents();
+      } catch (error) {
+        console.error('Ошибка загрузки клиентского кабинета:', error);
+        showMessage(error.message || 'Не удалось загрузить данные личного кабинета.', true);
+      }
+    }
+
+    requestForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const payload = { equipmentId: equipmentIdInput.value ? Number(equipmentIdInput.value) : null, title: titleInput.value.trim(), description: descriptionInput.value.trim(), priority: priorityInput.value };
+      if (!payload.equipmentId || !payload.title || !payload.description) { showMessage('Заполните оборудование, заголовок и описание заявки.', true); return; }
+      try {
+        const response = await fetch('/client-portal/repair-requests', { method:'POST', headers:authHeaders(), body:JSON.stringify(payload) });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Ошибка создания заявки');
+        showMessage('Заявка успешно создана.'); closeModal(); await loadClientPortalData(); switchTab('requests');
+      } catch (error) { showMessage(error.message || 'Не удалось создать заявку.', true); }
+    });
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        switchTab(button.dataset.tab);
+      });
+    });
+
+    createRequestBtn.addEventListener('click', () => openModal());
+    modalOverlay.addEventListener('click', closeModal);
+    modalCloseBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    checkAuth(); renderAuthUser(); loadClientPortalData();
+  </script>
+</body>
+</html>

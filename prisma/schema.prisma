@@ -56,6 +56,10 @@ model User {
   email        String   @unique
   passwordHash String
   role         UserRole
+
+  clientId     Int?
+  client       Client?  @relation(fields: [clientId], references: [id])
+
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -68,13 +72,14 @@ model Client {
   companyName   String
   contactPerson String
   phone         String?
-  email         String?  @unique
+  email         String?
   address       String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
   equipment      Equipment[]
   repairRequests RepairRequest[]
+  users          User[]
 }
 
 model EquipmentModel {
