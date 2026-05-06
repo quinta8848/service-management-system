@@ -719,6 +719,55 @@
   </div>
 
   <script>
+    function getToken() {
+      return localStorage.getItem('servicems_token');
+    }
+
+    function getCurrentUser() {
+      const user = localStorage.getItem('servicems_user');
+      return user ? JSON.parse(user) : null;
+    }
+
+    function authHeaders() {
+      const token = getToken();
+
+      return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      };
+    }
+
+    function checkAuth() {
+      const token = getToken();
+
+      if (!token) {
+        window.location.href = '/login.html';
+      }
+    }
+
+    function renderAuthUser() {
+      const user = getCurrentUser();
+      const currentUserInfo = document.getElementById('currentUserInfo');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      if (currentUserInfo && user) {
+        const displayName = user.name || user.email || 'Пользователь';
+        currentUserInfo.textContent = `${displayName} / ${user.role}`;
+      }
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          localStorage.removeItem('servicems_token');
+          localStorage.removeItem('servicems_user');
+          window.location.href = '/login.html';
+        });
+      }
+    }
+
+    checkAuth();
+    renderAuthUser();
+
+    
     const tbody = document.querySelector('#serviceTable tbody');
     const searchInput = document.getElementById('searchInput');
     const statusFilter = document.getElementById('statusFilter');
@@ -872,7 +921,10 @@
     async function deleteItem(id) {
       if (!confirm('Удалить сервисное событие?')) return;
       try {
-        const res = await fetch(`/service-events/${id}`, { method: 'DELETE' });
+        const res = await fetch(`/service-events/${id}`, {
+          method: 'DELETE',
+          headers: authHeaders(),
+        });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Ошибка удаления');
         showMessage(data.message || 'Удалено');
@@ -913,13 +965,13 @@
         if (editingId) {
           response = await fetch(`/service-events/${editingId}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: authHeaders(),
             body: JSON.stringify(payload)
           });
         } else {
           response = await fetch('/service-events', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: authHeaders(),
             body: JSON.stringify(payload)
           });
         }
