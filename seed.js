@@ -1,8 +1,14 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const bcrypt = require('bcryptjs');
 
 async function main() {
   console.log('Очистка базы...');
+
+  const adminPassword = await bcrypt.hash('admin123', 10);
+  const managerPassword = await bcrypt.hash('manager123', 10);
+  const engineerPassword = await bcrypt.hash('engineer123', 10);
+  const clientPassword = await bcrypt.hash('client123', 10);
 
   await prisma.serviceEvent.deleteMany();
   await prisma.repairRequest.deleteMany();
@@ -11,13 +17,25 @@ async function main() {
   await prisma.client.deleteMany();
   await prisma.user.deleteMany();
 
+  await prisma.$executeRawUnsafe(`
+    DELETE FROM sqlite_sequence
+    WHERE name IN (
+      'User',
+      'Client',
+      'EquipmentModel',
+      'Equipment',
+      'RepairRequest',
+      'ServiceEvent'
+    );
+`);
+
   console.log('Создание пользователей...');
 
   const admin = await prisma.user.create({
     data: {
       name: 'Администратор системы',
       email: 'admin@example.com',
-      passwordHash: 'admin123hash',
+      passwordHash: adminPassword,
       role: 'ADMIN',
     },
   });
@@ -26,7 +44,7 @@ async function main() {
     data: {
       name: 'Менеджер по работе с клиентами',
       email: 'manager@example.com',
-      passwordHash: 'manager123hash',
+      passwordHash: managerPassword,
       role: 'MANAGER',
     },
   });
@@ -35,7 +53,7 @@ async function main() {
     data: {
       name: 'Инженер Сергей Петров',
       email: 'engineer1@example.com',
-      passwordHash: 'engineer123hash',
+      passwordHash: engineerPassword,
       role: 'ENGINEER',
     },
   });
@@ -44,7 +62,7 @@ async function main() {
     data: {
       name: 'Инженер Алексей Смирнов',
       email: 'engineer2@example.com',
-      passwordHash: 'engineer223hash',
+      passwordHash: engineerPassword,
       role: 'ENGINEER',
     },
   });
@@ -58,6 +76,16 @@ async function main() {
       phone: '+7 999 111-11-11',
       email: 'robotex@example.com',
       address: 'Москва, ул. Технологическая, 15',
+    },
+  });
+
+  const clientUser = await prisma.user.create({
+    data: {
+      name: 'Представитель ООО РобоТех',
+      email: 'client@example.com',
+      passwordHash: clientPassword,
+      role: 'CLIENT',
+      clientId: client1.id,
     },
   });
 
