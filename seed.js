@@ -17,18 +17,6 @@ async function main() {
   await prisma.client.deleteMany();
   await prisma.user.deleteMany();
 
-  await prisma.$executeRawUnsafe(`
-    DELETE FROM sqlite_sequence
-    WHERE name IN (
-      'User',
-      'Client',
-      'EquipmentModel',
-      'Equipment',
-      'RepairRequest',
-      'ServiceEvent'
-    );
-`);
-
   console.log('Создание пользователей...');
 
   const admin = await prisma.user.create({

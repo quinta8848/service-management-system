@@ -2,22 +2,25 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../db/prisma');
 const bcrypt = require('bcryptjs');
+const { authenticateToken, requireRole } = require('../middleware/auth');
 
 const allowedRoles = ['ADMIN', 'MANAGER', 'ENGINEER', 'CLIENT'];
-const { authenticateToken, requireRole } = require('../middleware/auth');
+
+// Все маршруты пользователей доступны только администратору
+router.use(authenticateToken);
+router.use(requireRole('ADMIN'));
 
 // GET /users - получить всех пользователей
 router.get('/', async (req, res) => {
   try {
     const users = await prisma.user.findMany({
-      orderBy: {
-        id: 'asc',
-      },
+      orderBy: { id: 'asc' },
       select: {
         id: true,
         name: true,
         email: true,
         role: true,
+        clientId: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -46,6 +49,7 @@ router.get('/:id', async (req, res) => {
         name: true,
         email: true,
         role: true,
+        clientId: true,
         createdAt: true,
         updatedAt: true,
         assignedRepairRequests: true,
@@ -131,25 +135,48 @@ router.put('/:id', async (req, res) => {
     const id = Number(req.params.id);
 
     if (Number.isNaN(id)) {
-      return res.status(400).json({ error: 'Некорректный ID пользователя' });
+      return res.status(400).json({ error: 'Некорректный id пользователя' });
     }
 
     const { name, email, password, role, clientId } = req.body || {};
+
+    const existingUser = await prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!existingUser) {
+      return res.status(404).json({ error: 'Пользователь не найден' });
+    }
+
+    if (role && !allowedRoles.includes(role)) {
+      return res.status(400).json({
+        error: 'Некорректная роль. Допустимые значения: ADMIN, MANAGER, ENGINEER, CLIENT',
+      });
+    }
+
+    if (email && email !== existingUser.email) {
+      const emailOwner = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (emailOwner) {
+        return res.status(400).json({
+          error: 'Пользователь с таким email уже существует',
+        });
+      }
+    }
+
+    if (role === 'CLIENT' && !clientId) {
+      return res.status(400).json({
+        error: 'Для пользователя с ролью CLIENT необходимо указать clientId',
+      });
+    }
 
     const data = {};
 
     if (name !== undefined) data.name = name;
     if (email !== undefined) data.email = email;
-
-    if (role !== undefined) {
-      if (!allowedRoles.includes(role)) {
-        return res.status(400).json({
-          error: 'Некорректная роль. Допустимые значения: ADMIN, MANAGER, ENGINEER, CLIENT',
-        });
-      }
-
-      data.role = role;
-    }
+    if (role !== undefined) data.role = role;
 
     if (clientId !== undefined) {
       data.clientId = clientId ? Number(clientId) : null;
@@ -176,11 +203,6 @@ router.put('/:id', async (req, res) => {
     res.json(updatedUser);
   } catch (error) {
     console.error('Ошибка при обновлении пользователя:', error);
-
-    if (error.code === 'P2025') {
-      return res.status(404).json({ error: 'Пользователь не найден' });
-    }
-
     res.status(500).json({ error: 'Ошибка при обновлении пользователя' });
   }
 });

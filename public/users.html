@@ -641,8 +641,8 @@
           </div>
 
           <div class="form-field full">
-            <label for="passwordHash">Пароль</label>
-            <input type="text" id="password" name="password" />
+            <label for="password">Пароль</label>
+            <input type="password" id="password" name="password" placeholder="Введите новый пароль" />
           </div>
 
           <div class="form-field">
@@ -785,7 +785,7 @@
 
     const nameInput = document.getElementById('name');
     const emailInput = document.getElementById('email');
-    const passwordHashInput = document.getElementById('passwordHash');
+    const passwordInput = document.getElementById('password');
     const roleInput = document.getElementById('role');
 
     let editingId = null;
@@ -820,7 +820,7 @@
 
       nameInput.value = item?.name ?? '';
       emailInput.value = item?.email ?? '';
-      passwordHashInput.value = '';
+      passwordInput.value = '';
       roleInput.value = item?.role ?? 'ENGINEER';
 
       modal.classList.remove('hidden');
@@ -844,7 +844,9 @@
         summaryText.textContent = 'Загрузка данных...';
         tbody.innerHTML = '';
 
-        const response = await fetch('/users');
+        const response = await fetch('/users', {
+          headers: authHeaders(),
+        });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Ошибка при загрузке пользователей');
 
@@ -908,7 +910,9 @@
 
     async function editItem(id) {
       try {
-        const res = await fetch(`/users/${id}`);
+        const res = await fetch(`/users/${id}`, {
+          headers: authHeaders(),
+        });
         const item = await res.json();
         if (!res.ok) throw new Error(item.error || 'Не удалось получить запись');
         openModal('edit', item);
@@ -926,8 +930,9 @@
         role: roleInput.value,
       };
 
-      const passwordHash = passwordHashInput.value.trim();
-      if (passwordHash) payload.passwordHash = passwordHash;
+      const password = passwordInput.value.trim();
+
+      if (password) payload.password = password; 
 
       try {
         let response;
@@ -939,9 +944,9 @@
             body: JSON.stringify(payload)
           });
         } else {
-          if (!payload.passwordHash) {
-            showMessage('Для создания пользователя укажите passwordHash', true);
-            return;
+          if (!payload.password) {
+            showMessage('Для создания пользователя укажите пароль', true);
+          return;
           }
 
           response = await fetch('/users', {
