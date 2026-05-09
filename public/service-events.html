@@ -922,7 +922,9 @@
         summaryText.textContent = 'Загрузка данных...';
         tbody.innerHTML = '';
 
-        const response = await fetch('/service-events');
+        const response = await fetch('/service-events', {
+          headers: authHeaders(),
+        });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Ошибка при загрузке сервисных событий');
 
@@ -995,7 +997,9 @@
 
     async function editItem(id) {
       try {
-        const res = await fetch(`/service-events/${id}`);
+        const res = await fetch(`/service-events/${id}`, {
+          headers: authHeaders(),
+        });
         const item = await res.json();
         if (!res.ok) throw new Error(item.error || 'Не удалось получить запись');
         openModal('edit', item);

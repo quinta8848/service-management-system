@@ -1,22 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const prisma = require('../db/prisma');
+const bcrypt = require('bcryptjs');
+const { authenticateToken, requireRole } = require('../middleware/auth');
 
 const allowedRoles = ['ADMIN', 'MANAGER', 'ENGINEER', 'CLIENT'];
-const { authenticateToken, requireRole } = require('../middleware/auth');
+
+// Все маршруты пользователей доступны только администратору
+router.use(authenticateToken);
+router.use(requireRole('ADMIN'));
 
 // GET /users - получить всех пользователей
 router.get('/', async (req, res) => {
   try {
     const users = await prisma.user.findMany({
-      orderBy: {
-        id: 'asc',
-      },
+      orderBy: { id: 'asc' },
       select: {
         id: true,
         name: true,
         email: true,
         role: true,
+        clientId: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -45,6 +49,7 @@ router.get('/:id', async (req, res) => {
         name: true,
         email: true,
         role: true,
+        clientId: true,
         createdAt: true,
         updatedAt: true,
         assignedRepairRequests: true,
@@ -66,11 +71,11 @@ router.get('/:id', async (req, res) => {
 // POST /users - создать пользователя
 router.post('/', async (req, res) => {
   try {
-    const { name, email, passwordHash, role } = req.body || {};
+    const { name, email, password, role, clientId } = req.body || {};
 
-    if (!name || !email || !passwordHash || !role) {
+    if (!name || !email || !password || !role) {
       return res.status(400).json({
-        error: 'Обязательные поля: name, email, passwordHash, role',
+        error: 'Обязательные поля: name, email, password, role',
       });
     }
 
@@ -80,13 +85,23 @@ router.post('/', async (req, res) => {
       });
     }
 
+    if (role === 'CLIENT' && !clientId) {
+      return res.status(400).json({
+        error: 'Для пользователя с ролью CLIENT необходимо указать clientId',
+      });
+    }
+
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
 
     if (existingUser) {
-      return res.status(400).json({ error: 'Пользователь с таким email уже существует' });
+      return res.status(400).json({
+        error: 'Пользователь с таким email уже существует',
+      });
     }
+
+    const passwordHash = await bcrypt.hash(password, 10);
 
     const newUser = await prisma.user.create({
       data: {
@@ -94,12 +109,14 @@ router.post('/', async (req, res) => {
         email,
         passwordHash,
         role,
+        clientId: role === 'CLIENT' ? Number(clientId) : null,
       },
       select: {
         id: true,
         name: true,
         email: true,
         role: true,
+        clientId: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -121,7 +138,7 @@ router.put('/:id', async (req, res) => {
       return res.status(400).json({ error: 'Некорректный id пользователя' });
     }
 
-    const { name, email, passwordHash, role } = req.body || {};
+    const { name, email, password, role, clientId } = req.body || {};
 
     const existingUser = await prisma.user.findUnique({
       where: { id },
@@ -143,23 +160,41 @@ router.put('/:id', async (req, res) => {
       });
 
       if (emailOwner) {
-        return res.status(400).json({ error: 'Пользователь с таким email уже существует' });
+        return res.status(400).json({
+          error: 'Пользователь с таким email уже существует',
+        });
       }
+    }
+
+    if (role === 'CLIENT' && !clientId) {
+      return res.status(400).json({
+        error: 'Для пользователя с ролью CLIENT необходимо указать clientId',
+      });
+    }
+
+    const data = {};
+
+    if (name !== undefined) data.name = name;
+    if (email !== undefined) data.email = email;
+    if (role !== undefined) data.role = role;
+
+    if (clientId !== undefined) {
+      data.clientId = clientId ? Number(clientId) : null;
+    }
+
+    if (password) {
+      data.passwordHash = await bcrypt.hash(password, 10);
     }
 
     const updatedUser = await prisma.user.update({
       where: { id },
-      data: {
-        name,
-        email,
-        passwordHash,
-        role,
-      },
+      data,
       select: {
         id: true,
         name: true,
         email: true,
         role: true,
+        clientId: true,
         createdAt: true,
         updatedAt: true,
       },

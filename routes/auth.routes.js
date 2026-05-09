@@ -6,16 +6,12 @@ const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
-function isPasswordValid(plainPassword, storedPasswordHash) {
-  if (!storedPasswordHash) return false;
-
-  // Если в БД уже хранится bcrypt-хеш — проверяем как хеш
-  if (storedPasswordHash.startsWith('$2a$') || storedPasswordHash.startsWith('$2b$')) {
-    return bcrypt.compare(plainPassword, storedPasswordHash);
+async function isPasswordValid(plainPassword, storedPasswordHash) {
+  if (!plainPassword || !storedPasswordHash) {
+    return false;
   }
 
-  // Если сейчас в проекте demo-данные с обычной строкой, сравниваем напрямую
-  return plainPassword === storedPasswordHash;
+  return bcrypt.compare(plainPassword, storedPasswordHash);
 }
 
 router.post('/login', async (req, res) => {
