@@ -24,9 +24,16 @@
       box-sizing: border-box;
     }
 
+    html,
+    body {
+      min-height: 100%;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       font-family: Arial, Helvetica, sans-serif;
       background: var(--bg);
       color: var(--text);
@@ -48,10 +55,11 @@
     }
 
     .topbar-inner {
-      max-width: 1120px;
+      width: calc(100% - 64px);
+      max-width: 1600px;
       height: 68px;
       margin: 0 auto;
-      padding: 0 16px;
+      padding: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -118,21 +126,22 @@
     .hero {
       background: linear-gradient(110deg, #10214a, #243f8b);
       color: #ffffff;
-      padding: 74px 16px 86px;
+      padding: 74px 0 86px;
     }
 
     .hero-inner {
-      max-width: 1120px;
+      width: calc(100% - 64px);
+      max-width: 1600px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.85fr);
-      gap: 56px;
+      grid-template-columns: minmax(0, 1.45fr) minmax(360px, 0.85fr);
+      gap: 72px;
       align-items: center;
     }
 
     .hero h1 {
       margin: 0 0 20px;
-      max-width: 610px;
+      max-width: 760px;
       font-size: 52px;
       line-height: 1.06;
       letter-spacing: -0.045em;
@@ -140,7 +149,7 @@
 
     .hero p {
       margin: 0 0 28px;
-      max-width: 720px;
+      max-width: 860px;
       font-size: 17px;
       line-height: 1.65;
       color: #eaf1ff;
@@ -170,12 +179,16 @@
     }
 
     .main {
-      max-width: 1120px;
+      width: calc(100% - 64px);
+      max-width: 1600px;
       margin: 0 auto;
-      padding: 56px 16px 52px;
+      padding: 56px 0 52px;
+      flex: 1;
     }
 
     .about-card {
+      width: 100%;
+      max-width: none;
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -217,7 +230,7 @@
 
     .about-card p {
       margin: 0 0 16px;
-      max-width: 940px;
+      max-width: 1160px;
       font-size: 16px;
       line-height: 1.7;
       color: #475569;
@@ -229,13 +242,15 @@
 
 
     .footer {
+      margin-top: auto;
       background: #111827;
       color: #cbd5e1;
-      padding: 26px 16px;
+      padding: 26px 0;
     }
 
     .footer-inner {
-      max-width: 1120px;
+      width: calc(100% - 64px);
+      max-width: 1600px;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
@@ -252,6 +267,13 @@
     }
 
     @media (max-width: 900px) {
+      .topbar-inner,
+      .hero-inner,
+      .main,
+      .footer-inner {
+        width: calc(100% - 32px);
+      }
+
       .topbar-inner {
         height: auto;
         padding-top: 16px;
@@ -267,7 +289,7 @@
       }
 
       .hero {
-        padding: 56px 16px 64px;
+        padding: 56px 0 64px;
       }
 
       .hero-inner {
